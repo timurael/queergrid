@@ -212,12 +212,12 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-    padding: 1.2rem 2.5rem;
+    padding: 1.3rem 2.8rem;
     border: none;
     border-radius: var(--border-rad);
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s var(--bounce);
@@ -352,7 +352,7 @@ body {
     text-decoration: none;
     color: #555;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     transition: all 0.3s var(--smooth);
     position: relative;
 }
@@ -464,10 +464,10 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
     margin-bottom: 3rem;
     font-family: var(--font-heading);
-    font-size: clamp(1rem, 3vw, 1.3rem);
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
     font-weight: 600;
 }
 
@@ -480,16 +480,17 @@ body {
 }
 
 .equation-plus, .equation-equals {
-    font-size: 1.5em;
+    font-size: 1.8em;
     color: var(--hot-pink);
     font-weight: 900;
 }
 
 .equation-result {
     color: #2d2d2d;
-    font-weight: 600;
+    font-weight: 700;
     text-align: center;
-    max-width: 400px;
+    max-width: 500px;
+    font-size: 1.1em;
 }
 
 .hero-actions {
@@ -614,18 +615,18 @@ body {
 }
 
 .story-paragraph {
-    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-size: clamp(1.3rem, 3.5vw, 1.6rem);
     line-height: 1.8;
     color: #3d3d3d;
 }
 
 .story-paragraph.emphasis {
-    font-size: clamp(1.2rem, 3.5vw, 1.4rem);
+    font-size: clamp(1.4rem, 4vw, 1.7rem);
     font-weight: 600;
 }
 
 .story-paragraph.conclusion {
-    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-size: clamp(1.3rem, 3.5vw, 1.6rem);
     font-weight: 500;
 }
 
@@ -736,7 +737,7 @@ body {
 }
 
 .join-subtitle {
-    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    font-size: clamp(1.3rem, 3.5vw, 1.6rem);
     color: #555;
     margin-bottom: 3rem;
     line-height: 1.6;
@@ -796,7 +797,7 @@ body {
 .form-microcopy {
     color: #777;
     font-style: italic;
-    font-size: 1rem;
+    font-size: 1.1rem;
     max-width: 500px;
     margin: 0 auto;
 }
@@ -836,7 +837,7 @@ body {
 }
 
 .telegram-description {
-    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-size: clamp(1.3rem, 3.5vw, 1.6rem);
     color: #555;
     max-width: 600px;
     margin: 0 auto 3rem;
@@ -1144,6 +1145,7 @@ body {
     .hero-equation {
         flex-direction: column;
         text-align: center;
+        font-size: clamp(1.2rem, 4vw, 1.6rem);
     }
     
     .hero-actions {
