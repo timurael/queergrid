@@ -44,6 +44,11 @@ html {
     overflow-x: hidden;
 }
 
+/* Ensure anchor links don't get hidden behind fixed header */
+#story, #join, #signal {
+    scroll-margin-top: 100px;
+}
+
 body {
     font-family: var(--font-body);
     line-height: 1.6;
@@ -1107,13 +1112,33 @@ body {
 
 /* ===== RESPONSIVE REVOLUTION ===== */
 @media (max-width: 768px) {
+    .header {
+        padding: 1rem 0;
+    }
+    
     .header .container {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1rem;
+    }
+    
+    .logo {
+        gap: 0.5rem;
+    }
+    
+    .logo-image {
+        height: clamp(2rem, 4vw, 3rem);
+    }
+    
+    .logo-subtitle {
+        font-size: 0.8rem;
     }
     
     .nav {
         gap: 1.5rem;
+    }
+    
+    .nav-link {
+        font-size: 1rem;
     }
     
     .hero-equation {
@@ -1124,6 +1149,10 @@ body {
     .hero-actions {
         flex-direction: column;
         align-items: center;
+    }
+    
+    .story-section {
+        padding-top: 2rem;
     }
     
     .story-block {
@@ -1148,6 +1177,11 @@ body {
         flex-direction: column;
         gap: 1.5rem;
     }
+    
+    /* Add scroll padding to prevent content from being hidden behind fixed header */
+    #story, #join, #signal {
+        scroll-margin-top: 120px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1156,8 +1190,12 @@ body {
         --border-rad: 1.5rem;
     }
     
+    .header {
+        padding: 0.8rem 0;
+    }
+    
     .hero {
-        padding: 8rem 0 4rem;
+        padding: 9rem 0 4rem;
     }
     
     .btn {
