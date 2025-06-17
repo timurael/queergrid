@@ -406,6 +406,180 @@ function resetEmojiPositions() {
 
 
 
+// ===== MOOD TOGGLE SYSTEM =====
+function initMoodToggle() {
+    const moodToggle = document.getElementById('moodToggle');
+    const html = document.documentElement;
+    const cuteLabel = document.querySelector('.toggle-label.cute');
+    const angryLabel = document.querySelector('.toggle-label.angry');
+    
+    // Load saved mood preference
+    const savedMood = localStorage.getItem('queerGridMood') || 'cute';
+    if (savedMood === 'angry') {
+        setAngryMode();
+    }
+    
+    // Toggle functionality
+    if (moodToggle) {
+        moodToggle.addEventListener('click', () => {
+            if (html.classList.contains('angry-mode')) {
+                setCuteMode();
+            } else {
+                setAngryMode();
+            }
+        });
+    }
+    
+    function setCuteMode() {
+        html.classList.remove('angry-mode');
+        cuteLabel?.classList.add('active');
+        angryLabel?.classList.remove('active');
+        
+        // Save preference
+        localStorage.setItem('queerGridMood', 'cute');
+        
+        // Update content
+        updateContentForMood('cute');
+        
+        // Hide rage gallery
+        const rageGallery = document.querySelector('.rage-gallery');
+        if (rageGallery) {
+            rageGallery.style.display = 'none';
+        }
+        
+        // Show notification
+        showNotification('✨ Feeling cute and revolutionary! ✨', 'info');
+    }
+    
+    function setAngryMode() {
+        html.classList.add('angry-mode');
+        cuteLabel?.classList.remove('active');
+        angryLabel?.classList.add('active');
+        
+        // Save preference
+        localStorage.setItem('queerGridMood', 'angry');
+        
+        // Update content
+        updateContentForMood('angry');
+        
+        // Show rage gallery
+        const rageGallery = document.querySelector('.rage-gallery');
+        if (rageGallery) {
+            rageGallery.style.display = 'block';
+        }
+        
+        // Show notification
+        showNotification('🔥 RAGE MODE ACTIVATED - BURN IT ALL DOWN 🔥', 'error');
+        
+        // Add some chaos effects
+        addChaosEffects();
+    }
+    
+    function updateContentForMood(mood) {
+        const heroTitle = document.querySelector('.hero-title');
+        const storyTitle = document.querySelector('.story-title');
+        const joinTitle = document.querySelector('.join-title');
+        const telegramTitle = document.querySelector('.telegram-title .glitch-text');
+        
+        if (mood === 'angry') {
+            // Update main headline
+            if (heroTitle) {
+                const titleLines = heroTitle.querySelectorAll('.title-line');
+                if (titleLines[0]) titleLines[0].textContent = 'AI REVOLUTION HAPPENING';
+                if (titleLines[1]) titleLines[1].textContent = 'WITHOUT US?';
+                if (titleLines[2]) titleLines[2].textContent = 'FUCK THAT NOISE';
+                if (titleLines[3]) titleLines[3].textContent = 'BURN IT DOWN 🔥';
+            }
+            
+            // Update story title
+            if (storyTitle) {
+                const titleWords = storyTitle.querySelectorAll('.title-word');
+                if (titleWords[0]) titleWords[0].textContent = 'WHY';
+                if (titleWords[1]) titleWords[1].textContent = 'I\'M';
+                if (titleWords[2]) titleWords[2].textContent = 'ANGRY';
+            }
+            
+            // Update join title
+            if (joinTitle) {
+                joinTitle.textContent = 'JOIN THE RESISTANCE.';
+            }
+            
+            // Update signal title
+            if (telegramTitle) {
+                telegramTitle.textContent = 'FIGHT WITH US';
+            }
+            
+        } else {
+            // Restore cute mode content
+            if (heroTitle) {
+                const titleLines = heroTitle.querySelectorAll('.title-line');
+                if (titleLines[0]) titleLines[0].textContent = 'ai revolution happening';
+                if (titleLines[1]) titleLines[1].textContent = 'without us?';
+                if (titleLines[2]) titleLines[2].textContent = 'absolutely tf not,';
+                if (titleLines[3]) titleLines[3].textContent = 'bbs ⚡';
+            }
+            
+            // Restore story title
+            if (storyTitle) {
+                const titleWords = storyTitle.querySelectorAll('.title-word');
+                if (titleWords[0]) titleWords[0].textContent = 'my';
+                if (titleWords[1]) titleWords[1].textContent = 'fucking';
+                if (titleWords[2]) titleWords[2].textContent = 'story';
+            }
+            
+            // Restore join title
+            if (joinTitle) {
+                joinTitle.textContent = 'drop your email for the newsletter.';
+            }
+            
+            // Restore signal title
+            if (telegramTitle) {
+                telegramTitle.textContent = 'get in the group';
+            }
+        }
+    }
+    
+    function addChaosEffects() {
+        // Add some extra chaos when switching to angry mode
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach((btn, index) => {
+            setTimeout(() => {
+                btn.style.animation = 'brutalistShake 0.5s ease-in-out';
+                setTimeout(() => {
+                    btn.style.animation = '';
+                }, 500);
+            }, index * 100);
+        });
+        
+        // Add glitch effect to title
+        const mainTitle = document.querySelector('.hero-title');
+        if (mainTitle) {
+            mainTitle.style.animation = 'brutalistGlitch 1s ease-in-out';
+            setTimeout(() => {
+                mainTitle.style.animation = '';
+            }, 1000);
+        }
+    }
+}
+
+// Add brutalist shake animation
+const brutalistStyles = document.createElement('style');
+brutalistStyles.textContent = `
+    @keyframes brutalistShake {
+        0%, 100% { transform: translateX(0) skew(0deg); }
+        10% { transform: translateX(-2px) skew(-1deg); }
+        20% { transform: translateX(2px) skew(1deg); }
+        30% { transform: translateX(-2px) skew(-1deg); }
+        40% { transform: translateX(2px) skew(1deg); }
+        50% { transform: translateX(-2px) skew(-1deg); }
+        60% { transform: translateX(2px) skew(1deg); }
+        70% { transform: translateX(-2px) skew(-1deg); }
+        80% { transform: translateX(2px) skew(1deg); }
+        90% { transform: translateX(-2px) skew(-1deg); }
+    }
+`;
+document.head.appendChild(brutalistStyles);
+
 // ===== PERFORMANCE & ACCESSIBILITY =====
 function debounce(func, wait) {
     let timeout;
@@ -430,6 +604,7 @@ window.addEventListener('scroll', debouncedScrollHandler);
 // Initialize mouse interaction when page loads
 document.addEventListener('DOMContentLoaded', () => {
     initMouseInteraction();
+    initMoodToggle();
 });
 
 // ===== ACCESSIBILITY REVOLUTION =====

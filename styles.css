@@ -1,6 +1,6 @@
 /* ===== REVOLUTIONARY CSS VARIABLES ===== */
 :root {
-    /* Enhanced Barbie Colors */
+    /* Enhanced Barbie Colors - CUTE MODE */
     --hot-pink: #FF1493;
     --barbie-pink: #E0218A;
     --cotton-candy: #FFB3DA;
@@ -10,13 +10,13 @@
     --golden-hour: #FFD700;
     --silver-chrome: #C0C0C0;
     
-    /* Revolutionary Gradients */
+    /* Revolutionary Gradients - CUTE MODE */
     --gradient-rebellion: linear-gradient(135deg, #FF1493 0%, #E0218A 25%, #C471ED 50%, #12C2E9 75%, #00FFFF 100%);
     --gradient-chaos: linear-gradient(45deg, #FF69B4, #FFB3DA, #A8E6CF, #87CEEB, #DDA0DD);
     --gradient-fire: linear-gradient(135deg, #FF6B9D 0%, #FF1493 50%, #E0218A 100%);
     --gradient-rainbow: linear-gradient(90deg, #FF1493, #FF69B4, #FFB3DA, #A8E6CF, #87CEEB, #DDA0DD, #C471ED);
     
-    /* Typography Revolution */
+    /* Typography Revolution - CUTE MODE */
     --font-heading: 'Space Grotesk', 'Arial Black', sans-serif;
     --font-body: 'Inter', 'Helvetica Neue', sans-serif;
     
@@ -29,6 +29,38 @@
     /* Animation Magic */
     --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     --smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --glitch: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ===== BRUTALIST ANGRY MODE VARIABLES ===== */
+:root.angry-mode {
+    /* Brutalist Colors - ANGRY MODE */
+    --hot-pink: #FF0033;
+    --barbie-pink: #FF0033;
+    --cotton-candy: #FAFF00;
+    --mint-dream: #444444;
+    --sky-sparkle: #000000;
+    --lavender-magic: #FFFFFF;
+    --golden-hour: #FAFF00;
+    --silver-chrome: #444444;
+    
+    /* Brutalist Gradients - ANGRY MODE */
+    --gradient-rebellion: linear-gradient(90deg, #FF0033 0%, #000000 50%, #FAFF00 100%);
+    --gradient-chaos: linear-gradient(45deg, #FF0033, #000000, #FFFFFF, #FAFF00);
+    --gradient-fire: linear-gradient(135deg, #FF0033 0%, #000000 50%, #FF0033 100%);
+    --gradient-rainbow: linear-gradient(90deg, #FF0033, #000000, #FFFFFF, #FAFF00, #FF0033);
+    
+    /* Brutalist Typography - ANGRY MODE */
+    --font-heading: 'Courier New', 'IBM Plex Mono', monospace;
+    --font-body: 'Courier New', 'IBM Plex Mono', monospace;
+    
+    /* Brutalist Layout */
+    --border-rad: 0px;
+    --border-rad-small: 0px;
+    
+    /* Harsh Animation */
+    --bounce: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --smooth: cubic-bezier(1, 0, 0, 1);
     --glitch: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -1224,6 +1256,398 @@ body {
 @keyframes pageLoad {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== MOOD TOGGLE SYSTEM ===== */
+.mood-toggle-container {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mood-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.toggle-track {
+    width: 60px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    position: relative;
+    transition: all 0.3s var(--smooth);
+    border: 2px solid var(--hot-pink);
+    backdrop-filter: blur(10px);
+}
+
+.toggle-thumb {
+    width: 24px;
+    height: 24px;
+    background: var(--gradient-fire);
+    border-radius: 50%;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    transition: all 0.3s var(--bounce);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-labels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.toggle-label {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 600;
+    opacity: 0.6;
+    transition: all 0.3s var(--smooth);
+    text-align: center;
+}
+
+.toggle-label.active {
+    opacity: 1;
+    font-weight: 800;
+    color: var(--hot-pink);
+}
+
+/* Angry Mode Toggle States */
+.angry-mode .toggle-track {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #FF0033;
+}
+
+.angry-mode .toggle-thumb {
+    background: linear-gradient(135deg, #FF0033, #000000);
+    transform: translateX(30px);
+}
+
+.angry-mode .toggle-label.cute {
+    opacity: 0.4;
+    color: #666;
+}
+
+.angry-mode .toggle-label.angry {
+    opacity: 1;
+    font-weight: 900;
+    color: #FF0033;
+    text-transform: uppercase;
+}
+
+/* ===== ANGRY MODE GLOBAL STYLES ===== */
+.angry-mode {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+}
+
+.angry-mode body {
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 0, 51, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(250, 255, 0, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #000000 0%, #111111 50%, #000000 100%) !important;
+    font-family: var(--font-body) !important;
+}
+
+.angry-mode .header {
+    background: rgba(0, 0, 0, 0.9) !important;
+    border-bottom: 2px solid #FF0033 !important;
+    box-shadow: 0 4px 20px rgba(255, 0, 51, 0.3) !important;
+}
+
+.angry-mode .nav-link {
+    color: #FFFFFF !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    font-weight: 900 !important;
+}
+
+.angry-mode .nav-link:hover {
+    color: #FF0033 !important;
+}
+
+.angry-mode .hero {
+    background: 
+        radial-gradient(circle at 30% 40%, rgba(255, 0, 51, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(250, 255, 0, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #000000 0%, #111111 100%) !important;
+}
+
+.angry-mode .hero-title {
+    color: #FFFFFF !important;
+    text-transform: uppercase !important;
+    letter-spacing: -1px !important;
+}
+
+.angry-mode .title-line:nth-child(3) {
+    color: #FF0033 !important;
+    text-shadow: 2px 2px 0px #000000 !important;
+}
+
+.angry-mode .hero-equation {
+    border: 2px solid #FF0033;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    margin: 2rem 0;
+    transform: skew(-2deg);
+}
+
+.angry-mode .equation-part {
+    color: #FAFF00 !important;
+    text-transform: uppercase !important;
+    font-weight: 900 !important;
+}
+
+.angry-mode .equation-plus, 
+.angry-mode .equation-equals {
+    color: #FF0033 !important;
+}
+
+.angry-mode .equation-result {
+    color: #FFFFFF !important;
+    text-transform: uppercase !important;
+    font-weight: 900 !important;
+}
+
+.angry-mode .btn {
+    background: #FF0033 !important;
+    color: #FFFFFF !important;
+    border: 2px solid #FFFFFF !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    font-weight: 900 !important;
+    transform: skew(-5deg) !important;
+}
+
+.angry-mode .btn:hover {
+    background: #FAFF00 !important;
+    color: #000000 !important;
+    border-color: #FF0033 !important;
+    transform: skew(5deg) scale(1.05) !important;
+}
+
+.angry-mode .story-section {
+    background: rgba(17, 17, 17, 0.9) !important;
+    border-top: 4px solid #FF0033 !important;
+    border-bottom: 4px solid #FF0033 !important;
+}
+
+.angry-mode .story-title {
+    color: #FF0033 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 3px !important;
+}
+
+.angry-mode .story-paragraph {
+    color: #FFFFFF !important;
+    line-height: 1.4 !important;
+}
+
+.angry-mode .story-block {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 2px solid #444444 !important;
+    transform: skew(-1deg) !important;
+}
+
+.angry-mode .story-block:hover {
+    border-color: #FF0033 !important;
+    transform: skew(1deg) translateY(-2px) !important;
+}
+
+.angry-mode .join-section {
+    background: rgba(0, 0, 0, 0.9) !important;
+}
+
+.angry-mode .join-title {
+    color: #FAFF00 !important;
+    text-transform: uppercase !important;
+}
+
+.angry-mode .telegram-section {
+    background: 
+        linear-gradient(45deg, #000000 0%, #FF0033 50%, #000000 100%) !important;
+    border-top: 4px solid #FAFF00 !important;
+}
+
+.angry-mode .telegram-title {
+    color: #FFFFFF !important;
+    text-transform: uppercase !important;
+    text-shadow: 2px 2px 0px #FF0033 !important;
+}
+
+/* Mobile responsiveness for mood toggle */
+@media (max-width: 768px) {
+    .mood-toggle-container {
+        top: 1rem;
+        right: 1rem;
+        scale: 0.9;
+    }
+    
+    .toggle-label {
+        font-size: 0.7rem;
+    }
+}
+
+/* ===== RAGE GALLERY - ANGRY MODE ONLY ===== */
+.rage-gallery {
+    padding: var(--section-pad);
+    background: 
+        linear-gradient(45deg, #000000 0%, #FF0033 25%, #000000 50%, #FAFF00 75%, #000000 100%);
+    border-top: 8px solid #FF0033;
+    border-bottom: 8px solid #FAFF00;
+}
+
+.rage-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.rage-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 1rem;
+    text-shadow: 
+        2px 2px 0px #FF0033,
+        4px 4px 0px #000000;
+    animation: brutalistGlitch 3s infinite;
+}
+
+.rage-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    color: #FAFF00;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 900;
+}
+
+.rage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.rage-item {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 4px solid #FF0033;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.rage-item:hover {
+    transform: skew(-2deg) scale(1.05);
+    border-color: #FAFF00;
+    z-index: 10;
+}
+
+.rage-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(50%) contrast(120%) brightness(80%);
+    transition: all 0.3s ease;
+}
+
+.rage-item:hover .rage-image {
+    filter: grayscale(0%) contrast(150%) brightness(100%);
+    transform: scale(1.1);
+}
+
+.rage-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: #FAFF00;
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 1rem;
+    text-align: center;
+    transform: translateY(100%);
+    transition: all 0.3s ease;
+}
+
+.rage-item:hover .rage-overlay {
+    transform: translateY(0);
+    background: linear-gradient(transparent, rgba(255, 0, 51, 0.9));
+    color: #FFFFFF;
+}
+
+/* Angry mode visibility controls */
+.angry-mode-only {
+    display: none !important;
+}
+
+.angry-mode .angry-mode-only {
+    display: block !important;
+}
+
+/* Brutalist animations */
+@keyframes brutalistGlitch {
+    0%, 90%, 100% { 
+        transform: translateX(0); 
+        text-shadow: 2px 2px 0px #FF0033, 4px 4px 0px #000000;
+    }
+    91% { 
+        transform: translateX(-2px); 
+        text-shadow: -2px 2px 0px #FAFF00, 2px 4px 0px #FF0033;
+    }
+    92% { 
+        transform: translateX(2px); 
+        text-shadow: 2px -2px 0px #FF0033, -2px 4px 0px #FAFF00;
+    }
+    93% { 
+        transform: translateX(-2px); 
+        text-shadow: -2px 2px 0px #FAFF00, 2px 4px 0px #FF0033;
+    }
+    94% { 
+        transform: translateX(2px); 
+        text-shadow: 2px -2px 0px #FF0033, -2px 4px 0px #FAFF00;
+    }
+    95% { 
+        transform: translateX(-2px); 
+        text-shadow: -2px 2px 0px #FAFF00, 2px 4px 0px #FF0033;
+    }
+}
+
+/* Mobile responsiveness for rage gallery */
+@media (max-width: 768px) {
+    .rage-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+    
+    .rage-title {
+        font-size: clamp(2rem, 8vw, 4rem);
+        letter-spacing: 2px;
+    }
+    
+    .rage-subtitle {
+        font-size: clamp(1rem, 3vw, 1.4rem);
+    }
 }
 
 
