@@ -29,11 +29,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
           
-      - name: Install dependencies
-        run: npm ci
-        
+      - name: Create minimal package.json for build
+        run: |
+          echo '{
+            "name": "queer-grid",
+            "version": "1.0.0",
+            "scripts": {
+              "build": "node scripts/build-production.js"
+            }
+          }' > temp-package.json
+          mv temp-package.json package.json
+          
       - name: Build for production
         run: |
           # Process JavaScript for production
