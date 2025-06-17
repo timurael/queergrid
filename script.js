@@ -1,5 +1,201 @@
 // ===== QUEER GRID DUAL MOOD REVOLUTION ===== //
 
+// ===== GDPR CONSENT MANAGEMENT ===== //
+let consentGiven = false;
+let consentChoices = {
+    essential: true,
+    analytics: false,
+    marketing: false
+};
+
+// Initialize consent system
+document.addEventListener('DOMContentLoaded', function() {
+    initializeConsentSystem();
+    setupConsentPopup();
+});
+
+function initializeConsentSystem() {
+    // Check if consent has been given
+    const savedConsent = localStorage.getItem('gdpr-consent');
+    if (savedConsent) {
+        consentChoices = JSON.parse(savedConsent);
+        consentGiven = true;
+        applyConsentChoices();
+    } else {
+        // Show consent popup after a short delay
+        setTimeout(() => {
+            showConsentPopup();
+        }, 1000);
+    }
+}
+
+function setupConsentPopup() {
+    const acceptAllBtn = document.getElementById('acceptAllConsent');
+    const acceptSelectedBtn = document.getElementById('acceptSelectedConsent');
+    const rejectAllBtn = document.getElementById('rejectAllConsent');
+    
+    if (acceptAllBtn) {
+        acceptAllBtn.addEventListener('click', () => {
+            acceptAllConsent();
+        });
+    }
+    
+    if (acceptSelectedBtn) {
+        acceptSelectedBtn.addEventListener('click', () => {
+            acceptSelectedConsent();
+        });
+    }
+    
+    if (rejectAllBtn) {
+        rejectAllBtn.addEventListener('click', () => {
+            rejectAllConsent();
+        });
+    }
+}
+
+function showConsentPopup() {
+    const popup = document.getElementById('consentPopup');
+    if (popup) {
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Add sparkle effect
+        createMultipleSparkles(3);
+    }
+}
+
+function hideConsentPopup() {
+    const popup = document.getElementById('consentPopup');
+    if (popup) {
+        popup.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+function acceptAllConsent() {
+    consentChoices = {
+        essential: true,
+        analytics: true,
+        marketing: true
+    };
+    saveConsentChoices();
+    hideConsentPopup();
+    
+    // Show success message
+    showNotification(
+        currentMode === 'cute' ? 
+        'yay! thanks for trusting us with your data, bb! 💖' : 
+        'CONSENT ACCEPTED. REVOLUTION CONTINUES. ⚡',
+        'success'
+    );
+    
+    // Create mega sparkle explosion
+    createMegaSparkleExplosion();
+}
+
+function acceptSelectedConsent() {
+    // Get user's choices from checkboxes
+    const analyticsCheckbox = document.getElementById('analyticsCookies');
+    const marketingCheckbox = document.getElementById('marketingConsent');
+    
+    consentChoices = {
+        essential: true, // Always true
+        analytics: analyticsCheckbox ? analyticsCheckbox.checked : false,
+        marketing: marketingCheckbox ? marketingCheckbox.checked : false
+    };
+    
+    saveConsentChoices();
+    hideConsentPopup();
+    
+    showNotification(
+        currentMode === 'cute' ? 
+        'perfect! your choices have been saved 💫' : 
+        'CONSENT PREFERENCES SAVED. ⚡',
+        'success'
+    );
+    
+    createSparkleExplosion(document.getElementById('acceptSelectedConsent'));
+}
+
+function rejectAllConsent() {
+    consentChoices = {
+        essential: true,
+        analytics: false,
+        marketing: false
+    };
+    saveConsentChoices();
+    hideConsentPopup();
+    
+    showNotification(
+        currentMode === 'cute' ? 
+        'no worries! only essential cookies for you 🍪' : 
+        'MINIMAL DATA COLLECTION ACTIVE. ⚡',
+        'info'
+    );
+}
+
+function saveConsentChoices() {
+    const consentData = {
+        ...consentChoices,
+        timestamp: new Date().toISOString(),
+        version: '1.0'
+    };
+    
+    localStorage.setItem('gdpr-consent', JSON.stringify(consentData));
+    consentGiven = true;
+    applyConsentChoices();
+    
+    // Send consent to backend
+    sendConsentToBackend(consentData);
+}
+
+function applyConsentChoices() {
+    // Apply analytics consent
+    if (consentChoices.analytics) {
+        initializeAnalytics();
+    }
+    
+    // Apply marketing consent (affects email form)
+    const marketingCheckbox = document.getElementById('consent');
+    if (marketingCheckbox && consentChoices.marketing) {
+        marketingCheckbox.checked = true;
+    }
+}
+
+function initializeAnalytics() {
+    // Privacy-friendly analytics - only if consent given
+    if (consentChoices.analytics) {
+        trackEvent('page_view', {
+            page: window.location.pathname,
+            referrer: document.referrer,
+            timestamp: new Date().toISOString()
+        });
+    }
+}
+
+async function sendConsentToBackend(consentData) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/gdpr/consent`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                consent: consentData,
+                source: 'website',
+                userAgent: navigator.userAgent,
+                timestamp: new Date().toISOString()
+            })
+        });
+        
+        if (!response.ok) {
+            console.warn('Failed to send consent to backend');
+        }
+    } catch (error) {
+        console.warn('Error sending consent to backend:', error);
+    }
+}
+
 // ===== MOOD TOGGLE SYSTEM ===== //
 const moodToggle = document.getElementById('moodToggle');
 const html = document.documentElement;
@@ -37,8 +233,10 @@ function toggleMood() {
     
     if (currentMode === 'angry') {
         initializePosters();
+        initializeAngryMode();
     } else {
         clearPosters();
+        clearAngryMode();
     }
 }
 
@@ -140,42 +338,129 @@ function scrollToStory() {
 }
 
 // ===== EMAIL SIGNUP REVOLUTION =====
-function handleEmailSignup(event) {
+// Configuration
+const API_BASE_URL = 'http://localhost:3001'; // Update for production
+
+async function handleEmailSignup(event) {
     event.preventDefault();
     
+    const form = document.getElementById('emailForm');
     const emailInput = document.getElementById('email');
-    const email = emailInput.value.trim();
+    const consentInput = document.getElementById('consent');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
     
+    // Clear previous messages
+    hideMessages();
+    
+    // Get form data
+    const formData = new FormData(form);
+    const email = formData.get('email').trim();
+    const consent = consentInput.checked;
+    
+    // Client-side validation
     if (!email) {
-        showNotification('drop that email, bb! we need it for the revolution ⚡', 'error');
+        showError('drop that email, bb! we need it for the revolution ⚡');
         return;
     }
     
     if (!isValidEmail(email)) {
-        showNotification('hmm, that email looks sus 👀 try again?', 'error');
+        showError('hmm, that email looks sus 👀 try again?');
         return;
     }
     
-    // Revolutionary form submission
-    const submitBtn = event.target.querySelector('.submit-btn');
-    const originalText = submitBtn.innerHTML;
+    if (!consent) {
+        showError('we need your consent to send you revolutionary updates! 🏳️‍🌈');
+        return;
+    }
     
-    submitBtn.innerHTML = '<span>joining...</span>';
-    submitBtn.disabled = true;
+    // Check if GDPR consent has been given
+    if (!consentGiven) {
+        showError('please accept our privacy policy first! 🍪');
+        showConsentPopup();
+        return;
+    }
+    
+    // Show loading state
+    setLoading(true);
     
     // Add sparkle explosion
     createSparkleExplosion(submitBtn);
     
-    setTimeout(() => {
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-        emailInput.value = '';
-        showNotification('WELCOME TO THE REVOLUTION! 🚀 check your email for the magic ✨', 'success');
+    try {
+        // Capture UTM parameters
+        captureUTMParameters();
         
-        // Console log for backend integration
-        console.log('Revolutionary email submitted:', email);
-        console.log('Send this to your ConvertKit/Mailchimp/etc API');
-    }, 2500);
+        // Prepare submission data
+        const submissionData = {
+            email: email,
+            consent: consent,
+            source: formData.get('source') || 'website',
+            utmSource: formData.get('utmSource') || null,
+            utmMedium: formData.get('utmMedium') || null,
+            utmCampaign: formData.get('utmCampaign') || null
+        };
+        
+        // Submit to backend
+        const response = await fetch(`${API_BASE_URL}/api/email/subscribe`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(submissionData)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            // Success
+            if (result.alreadySubscribed) {
+                showSuccess('you\'re already part of the revolution! 🌈✨');
+                showNotification('already in the revolution! 🌈✨', 'info');
+            } else if (result.requiresVerification) {
+                showSuccess('WELCOME TO THE REVOLUTION! 🚀 check your email for verification magic ✨');
+                showNotification('check your email for the verification magic! ✨', 'success');
+            } else {
+                showSuccess('REVOLUTIONARY SIGNUP COMPLETE! 🚀');
+                showNotification('WELCOME TO THE REVOLUTION! 🚀', 'success');
+            }
+            
+            // Clear form
+            form.reset();
+            
+            // Track successful subscription
+            trackEvent('email_subscription', {
+                email_hash: hashEmail(email),
+                source: submissionData.source
+            });
+            
+        } else {
+            // Error
+            const errorMsg = result.error || 'something went wrong in the revolution 😅 try again?';
+            showError(errorMsg);
+            showNotification(errorMsg, 'error');
+            
+            // Track error
+            trackEvent('email_subscription_error', {
+                error: result.code || 'unknown_error'
+            });
+        }
+        
+    } catch (error) {
+        console.error('Subscription error:', error);
+        const errorMsg = 'network hiccup in the matrix 🌐 check your connection?';
+        showError(errorMsg);
+        showNotification(errorMsg, 'error');
+        
+        // Track network error
+        trackEvent('email_subscription_network_error', {
+            error: error.message
+        });
+        
+    } finally {
+        setLoading(false);
+    }
 }
 
 function isValidEmail(email) {
@@ -513,80 +798,7 @@ function resetEmojiPositions() {
 
 
 
-// ===== GAY WALK BADGE SPECIAL POPUP =====
-function showGayWalkPopup(event) {
-    event.stopPropagation(); // Prevent regular click popup
-    
-    const popup = document.createElement('div');
-    popup.className = 'gay-walk-popup';
-    popup.innerHTML = `
-        <div class="gay-walk-popup-content">
-            <div class="gay-walk-flags">🏳️‍🌈🏳️‍⚧️</div>
-            <div class="gay-walk-title">GAY WALK: ACTIVATED</div>
-            <div class="gay-walk-subtitle">strutting through the revolution</div>
-            <div class="gay-walk-message">✨ baby steps also counts <3 ✨</div>
-        </div>
-    `;
 
-    // Position at top-right corner
-    popup.style.position = 'fixed';
-    popup.style.top = '20px';
-    popup.style.right = '20px';
-    popup.style.zIndex = '10001';
-
-    document.body.appendChild(popup);
-
-    // Animate in
-    setTimeout(() => popup.classList.add('show'), 10);
-
-    // Create special sparkle explosion
-    createGayWalkSparkles();
-
-    // Remove after longer duration
-    setTimeout(() => {
-        popup.classList.add('fade-out');
-        setTimeout(() => popup.remove(), 500);
-    }, 4000);
-}
-
-function createGayWalkSparkles() {
-    const sparkleCount = 12;
-    const gaySparkles = ['🏳️‍🌈', '🏳️‍⚧️', '✨', '💫', '🌈', '👑'];
-    
-    for (let i = 0; i < sparkleCount; i++) {
-        setTimeout(() => {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'gay-walk-sparkle';
-            sparkle.innerHTML = gaySparkles[Math.floor(Math.random() * gaySparkles.length)];
-            
-            // Start from badge area and spread out
-            const startX = window.innerWidth / 2;
-            const startY = 150;
-            
-            sparkle.style.position = 'fixed';
-            sparkle.style.left = startX + 'px';
-            sparkle.style.top = startY + 'px';
-            sparkle.style.pointerEvents = 'none';
-            sparkle.style.zIndex = '9999';
-            sparkle.style.fontSize = '2rem';
-            sparkle.style.opacity = '1';
-            
-            // Random explosion direction
-            const angle = Math.random() * 2 * Math.PI;
-            const distance = 100 + Math.random() * 150;
-            const endX = startX + Math.cos(angle) * distance;
-            const endY = startY + Math.sin(angle) * distance;
-            
-            sparkle.style.setProperty('--end-x', endX + 'px');
-            sparkle.style.setProperty('--end-y', endY + 'px');
-            sparkle.style.animation = 'gayWalkSparkle 2s ease-out forwards';
-            
-            document.body.appendChild(sparkle);
-            
-            setTimeout(() => sparkle.remove(), 2000);
-        }, i * 100);
-    }
-}
 
 // ===== PERFORMANCE & ACCESSIBILITY =====
 function debounce(func, wait) {
@@ -864,10 +1076,504 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+// ===== ANGRY MODE ENHANCEMENTS =====
+let angryModeInterval;
+let glitchElements = [];
+
+function initializeAngryMode() {
+    // Add glitch effect to text elements
+    addAngryModeEffects();
+    
+    // Start continuous glitch effects
+    startAngryModeEffects();
+    
+    // Add angry mode cursor trail
+    addAngryModeCursor();
+    
+    // Transform text content for angry mode
+    transformAngryModeText();
+}
+
+function clearAngryMode() {
+    // Clear all angry mode effects
+    if (angryModeInterval) {
+        clearInterval(angryModeInterval);
+        angryModeInterval = null;
+    }
+    
+    // Remove glitch classes
+    glitchElements.forEach(element => {
+        element.classList.remove('angry-glitch');
+    });
+    glitchElements = [];
+    
+    // Clear cursor trail
+    clearAngryModeCursor();
+    
+    // Restore original text content
+    restoreOriginalText();
+}
+
+function addAngryModeEffects() {
+    // Add glitch effects to headers and important text
+    const headers = document.querySelectorAll('h1, h2, h3, .hero-title, .story-title');
+    headers.forEach(header => {
+        header.classList.add('angry-glitch');
+        glitchElements.push(header);
+    });
+    
+    // Add terminal-like effects to buttons
+    const buttons = document.querySelectorAll('.btn');
+    buttons.forEach(button => {
+        if (!button.querySelector('.terminal-prefix')) {
+            const prefix = document.createElement('span');
+            prefix.className = 'terminal-prefix';
+            prefix.textContent = '$ ';
+            button.prepend(prefix);
+        }
+    });
+}
+
+function startAngryModeEffects() {
+    // Random screen glitch effects
+    angryModeInterval = setInterval(() => {
+        if (Math.random() < 0.05) { // 5% chance every interval
+            triggerScreenGlitch();
+        }
+        
+        if (Math.random() < 0.1) { // 10% chance for text scramble
+            triggerTextScramble();
+        }
+    }, 500);
+}
+
+function triggerScreenGlitch() {
+    const body = document.body;
+    body.style.filter = 'hue-rotate(90deg) contrast(1.5) brightness(1.2)';
+    
+    setTimeout(() => {
+        body.style.filter = 'hue-rotate(-45deg) contrast(0.8) brightness(0.9)';
+    }, 50);
+    
+    setTimeout(() => {
+        body.style.filter = '';
+    }, 100);
+}
+
+function triggerTextScramble() {
+    const glitchTargets = document.querySelectorAll('.angry-glitch');
+    if (glitchTargets.length === 0) return;
+    
+    const target = glitchTargets[Math.floor(Math.random() * glitchTargets.length)];
+    const originalText = target.textContent;
+    const scrambledChars = '!@#$%^&*()_+-=[]{}|;:,.<>?~`';
+    
+    // Scramble text briefly
+    let scrambled = '';
+    for (let i = 0; i < originalText.length; i++) {
+        if (Math.random() < 0.3 && originalText[i] !== ' ') {
+            scrambled += scrambledChars[Math.floor(Math.random() * scrambledChars.length)];
+        } else {
+            scrambled += originalText[i];
+        }
+    }
+    
+    target.textContent = scrambled;
+    
+    // Restore original text
+    setTimeout(() => {
+        target.textContent = originalText;
+    }, 100);
+}
+
+let cursorTrail = [];
+const maxTrailLength = 10;
+
+function addAngryModeCursor() {
+    document.addEventListener('mousemove', createAngryTrail);
+}
+
+function clearAngryModeCursor() {
+    document.removeEventListener('mousemove', createAngryTrail);
+    cursorTrail.forEach(trail => {
+        if (trail.parentNode) {
+            trail.parentNode.removeChild(trail);
+        }
+    });
+    cursorTrail = [];
+}
+
+function createAngryTrail(e) {
+    if (cursorTrail.length >= maxTrailLength) {
+        const oldTrail = cursorTrail.shift();
+        if (oldTrail.parentNode) {
+            oldTrail.parentNode.removeChild(oldTrail);
+        }
+    }
+    
+    const trail = document.createElement('div');
+    trail.className = 'angry-cursor-trail';
+    trail.style.left = e.clientX + 'px';
+    trail.style.top = e.clientY + 'px';
+    document.body.appendChild(trail);
+    cursorTrail.push(trail);
+    
+    // Remove trail after animation
+    setTimeout(() => {
+        if (trail.parentNode) {
+            trail.parentNode.removeChild(trail);
+        }
+        const index = cursorTrail.indexOf(trail);
+        if (index > -1) {
+            cursorTrail.splice(index, 1);
+        }
+    }, 500);
+}
+
+const originalTexts = new Map();
+
+function transformAngryModeText() {
+    // Transform specific text elements for angry mode
+    const transformations = {
+        'join us': '> INFILTRATE_SYSTEM.exe',
+        'drop your email': '> ACCESS_TERMINAL',
+        'get in': '> HACK_THE_MATRIX',
+        'feeling cute today': 'SYSTEM_STABLE.status',
+        'feeling angry today': 'REVOLUTION_MODE.exe'
+    };
+    
+    // Store original texts and apply transformations
+    document.querySelectorAll('button, a, .mood-label').forEach(element => {
+        const originalText = element.textContent.toLowerCase().trim();
+        if (!originalTexts.has(element)) {
+            originalTexts.set(element, element.innerHTML);
+        }
+        
+        for (const [original, transformed] of Object.entries(transformations)) {
+            if (originalText.includes(original)) {
+                element.innerHTML = element.innerHTML.replace(new RegExp(original, 'gi'), transformed);
+                break;
+            }
+        }
+    });
+}
+
+function restoreOriginalText() {
+    // Restore all original text content
+    originalTexts.forEach((originalHTML, element) => {
+        element.innerHTML = originalHTML;
+    });
+    
+    // Remove terminal prefixes
+    document.querySelectorAll('.terminal-prefix').forEach(prefix => {
+        prefix.remove();
+    });
+}
+
+// ===== GDPR FORM HELPERS =====
+
+// Show/hide message functions
+function showSuccess(message) {
+    const successElement = document.getElementById('successMessage');
+    if (successElement) {
+        successElement.textContent = message;
+        successElement.style.display = 'block';
+        
+        // Scroll message into view
+        successElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function showError(message) {
+    const errorElement = document.getElementById('errorMessage');
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+        
+        // Scroll message into view
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function hideMessages() {
+    const successElement = document.getElementById('successMessage');
+    const errorElement = document.getElementById('errorMessage');
+    
+    if (successElement) successElement.style.display = 'none';
+    if (errorElement) errorElement.style.display = 'none';
+}
+
+// Loading state management
+function setLoading(isLoading) {
+    const submitBtn = document.getElementById('submitBtn');
+    const emailInput = document.getElementById('email');
+    const consentInput = document.getElementById('consent');
+    
+    if (!submitBtn) return;
+    
+    if (isLoading) {
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+        if (emailInput) emailInput.disabled = true;
+        if (consentInput) consentInput.disabled = true;
+    } else {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+        if (emailInput) emailInput.disabled = false;
+        if (consentInput) consentInput.disabled = false;
+    }
+}
+
+// Capture UTM parameters from URL
+function captureUTMParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    const utmSource = urlParams.get('utm_source');
+    const utmMedium = urlParams.get('utm_medium');
+    const utmCampaign = urlParams.get('utm_campaign');
+    
+    const utmSourceField = document.getElementById('utmSource');
+    const utmMediumField = document.getElementById('utmMedium');
+    const utmCampaignField = document.getElementById('utmCampaign');
+    
+    if (utmSource && utmSourceField) utmSourceField.value = utmSource;
+    if (utmMedium && utmMediumField) utmMediumField.value = utmMedium;
+    if (utmCampaign && utmCampaignField) utmCampaignField.value = utmCampaign;
+}
+
+// Hash email for privacy-friendly analytics
+function hashEmail(email) {
+    // Simple hash function for client-side (not cryptographically secure)
+    let hash = 0;
+    for (let i = 0; i < email.length; i++) {
+        const char = email.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32-bit integer
+    }
+    return hash.toString();
+}
+
+// Privacy-friendly event tracking
+function trackEvent(eventName, properties = {}) {
+    // Only track if analytics is enabled and user has consented
+    if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, properties);
+    }
+    
+    // Console log for development
+    if (window.location.hostname === 'localhost') {
+        console.log('Event tracked:', eventName, properties);
+    }
+}
+
+// Data rights modal functionality
+function setupDataRightsModal() {
+    const dataRightsLink = document.getElementById('dataRightsLink');
+    
+    if (dataRightsLink) {
+        dataRightsLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showDataRightsModal();
+        });
+    }
+}
+
+function showDataRightsModal() {
+    // Create modal HTML
+    const modalHTML = `
+        <div id="dataRightsModal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🔒 Your Data Rights</h3>
+                    <button class="modal-close" onclick="closeDataRightsModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Under GDPR, you have the following rights regarding your personal data:</p>
+                    
+                    <div class="rights-list">
+                        <div class="right-item">
+                            <h4>📋 Right of Access</h4>
+                            <p>Get a copy of all personal data we have about you</p>
+                        </div>
+                        
+                        <div class="right-item">
+                            <h4>✏️ Right to Rectification</h4>
+                            <p>Correct any inaccurate or incomplete data</p>
+                        </div>
+                        
+                        <div class="right-item">
+                            <h4>🗑️ Right to Erasure</h4>
+                            <p>Delete your personal data (Right to be forgotten)</p>
+                        </div>
+                        
+                        <div class="right-item">
+                            <h4>⏸️ Right to Restriction</h4>
+                            <p>Limit how we process your data</p>
+                        </div>
+                        
+                        <div class="right-item">
+                            <h4>📦 Right to Data Portability</h4>
+                            <p>Get your data in a machine-readable format</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info">
+                        <p><strong>To exercise your rights:</strong></p>
+                        <p>Email us at: <a href="mailto:privacy@queergrid.org">privacy@queergrid.org</a></p>
+                        <p>We will respond within 30 days as required by law.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to page
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Add styles if not already present
+    if (!document.getElementById('modalStyles')) {
+        const styles = `
+            <style id="modalStyles">
+                .modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    padding: 20px;
+                    box-sizing: border-box;
+                }
+                
+                .modal-content {
+                    background: white;
+                    border-radius: 12px;
+                    max-width: 600px;
+                    width: 100%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    position: relative;
+                }
+                
+                .modal-header {
+                    padding: 20px 20px 0;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid #eee;
+                    margin-bottom: 20px;
+                }
+                
+                .modal-header h3 {
+                    margin: 0;
+                    color: #333;
+                    flex: 1;
+                }
+                
+                .modal-close {
+                    background: none;
+                    border: none;
+                    font-size: 24px;
+                    cursor: pointer;
+                    color: #666;
+                    padding: 0;
+                    width: 30px;
+                    height: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                .modal-close:hover {
+                    color: #333;
+                }
+                
+                .modal-body {
+                    padding: 0 20px 20px;
+                    color: #333;
+                    line-height: 1.6;
+                }
+                
+                .rights-list {
+                    margin: 20px 0;
+                }
+                
+                .right-item {
+                    margin-bottom: 15px;
+                    padding: 15px;
+                    background: #f8f9fa;
+                    border-radius: 8px;
+                    border-left: 4px solid #667eea;
+                }
+                
+                .right-item h4 {
+                    margin: 0 0 8px 0;
+                    color: #667eea;
+                }
+                
+                .right-item p {
+                    margin: 0;
+                    font-size: 14px;
+                    color: #666;
+                }
+                
+                .contact-info {
+                    margin-top: 25px;
+                    padding: 15px;
+                    background: #e3f2fd;
+                    border-radius: 8px;
+                }
+                
+                .contact-info a {
+                    color: #667eea;
+                    text-decoration: none;
+                }
+                
+                .contact-info a:hover {
+                    text-decoration: underline;
+                }
+                
+                @media (max-width: 768px) {
+                    .modal-content {
+                        margin: 10px;
+                        max-height: 90vh;
+                    }
+                    
+                    .modal-header, .modal-body {
+                        padding: 15px;
+                    }
+                }
+            </style>
+        `;
+        document.head.insertAdjacentHTML('beforeend', styles);
+    }
+}
+
+function closeDataRightsModal() {
+    const modal = document.getElementById('dataRightsModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Initialize GDPR functionality
+document.addEventListener('DOMContentLoaded', function() {
+    setupDataRightsModal();
+    captureUTMParameters();
+});
+
 // Export functions for potential external use
 window.queerGridRevolution = {
     joinTelegram,
     createSparkleEffect,
     createMultipleSparkles,
-    showNotification
+    showNotification,
+    initializeAngryMode,
+    clearAngryMode,
+    showDataRightsModal,
+    closeDataRightsModal
 }; 

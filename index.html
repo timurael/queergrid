@@ -11,6 +11,123 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- GDPR Consent Popup -->
+    <div id="consentPopup" class="consent-popup" style="display: none;">
+        <div class="consent-overlay"></div>
+        <div class="consent-modal">
+            <div class="consent-header">
+                <h3 class="consent-title">
+                    <span class="cute-mode-text">hey bb, let's talk privacy! 🍪✨</span>
+                    <span class="angry-mode-text">YOUR DATA, YOUR RIGHTS ⚡</span>
+                </h3>
+            </div>
+            
+            <div class="consent-content">
+                <div class="consent-section">
+                    <p class="consent-text">
+                        <span class="cute-mode-text">
+                            we use cookies and collect some data to make this site work and keep you updated on our queer tech revolution. 
+                            we're super transparent about it because <strong>your privacy matters</strong> 💖
+                        </span>
+                        <span class="angry-mode-text">
+                            we collect data to fuel the revolution and keep you informed. 
+                            <strong>we're transparent as fuck</strong> because your privacy is non-negotiable.
+                        </span>
+                    </p>
+                </div>
+
+                <div class="consent-options">
+                    <div class="consent-category">
+                        <div class="consent-item">
+                            <label class="consent-checkbox essential">
+                                <input type="checkbox" id="essentialCookies" checked disabled>
+                                <span class="checkmark"></span>
+                                <div class="consent-label">
+                                    <strong>Essential</strong>
+                                    <p>Required for the site to function. Cannot be disabled.</p>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <div class="consent-item">
+                            <label class="consent-checkbox">
+                                <input type="checkbox" id="analyticsCookies">
+                                <span class="checkmark"></span>
+                                <div class="consent-label">
+                                    <strong>Analytics</strong>
+                                    <p>Privacy-friendly analytics to improve our site (no tracking across sites).</p>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <div class="consent-item">
+                            <label class="consent-checkbox">
+                                <input type="checkbox" id="marketingConsent" checked>
+                                <span class="checkmark"></span>
+                                <div class="consent-label">
+                                    <strong>Email Updates</strong>
+                                    <p>Consent to receive our newsletter and community updates.</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="consent-details">
+                    <details class="privacy-details">
+                        <summary>What data do we collect? 📋</summary>
+                        <div class="privacy-content">
+                            <ul>
+                                <li><strong>Email addresses:</strong> For newsletter and community updates</li>
+                                <li><strong>Basic analytics:</strong> Page visits, referrer info (anonymized)</li>
+                                <li><strong>Technical data:</strong> IP address, browser type (for security)</li>
+                                <li><strong>Consent records:</strong> Your privacy choices and when you made them</li>
+                            </ul>
+                            <p><strong>We never:</strong> Sell your data, track you across sites, or share with advertisers.</p>
+                        </div>
+                    </details>
+                    
+                    <details class="privacy-details">
+                        <summary>Your rights under GDPR 🛡️</summary>
+                        <div class="privacy-content">
+                            <ul>
+                                <li><strong>Access:</strong> Get a copy of your data</li>
+                                <li><strong>Rectification:</strong> Correct inaccurate data</li>
+                                <li><strong>Erasure:</strong> Delete your data</li>
+                                <li><strong>Restriction:</strong> Limit how we process your data</li>
+                                <li><strong>Portability:</strong> Transfer your data elsewhere</li>
+                            </ul>
+                            <p>Contact us at <a href="mailto:privacy@queergrid.org">privacy@queergrid.org</a> to exercise your rights.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+            
+            <div class="consent-actions">
+                <button id="acceptAllConsent" class="btn btn-primary consent-btn">
+                    <span class="cute-mode-text">Accept All 💖</span>
+                    <span class="angry-mode-text">Accept All ⚡</span>
+                </button>
+                <button id="acceptSelectedConsent" class="btn btn-secondary consent-btn">
+                    <span class="cute-mode-text">Save My Choices</span>
+                    <span class="angry-mode-text">Save Choices</span>
+                </button>
+                <button id="rejectAllConsent" class="btn btn-outline consent-btn">
+                    <span class="cute-mode-text">Essential Only</span>
+                    <span class="angry-mode-text">Essential Only</span>
+                </button>
+            </div>
+            
+            <div class="consent-footer">
+                <p>
+                    <a href="#privacy" class="privacy-link">Privacy Policy</a> | 
+                    <a href="#terms" class="privacy-link">Terms</a> | 
+                    <a href="javascript:void(0)" onclick="showConsentPopup()" class="privacy-link">Manage Consent</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- Mood Toggle - Always Visible at Top -->
     <div class="mood-toggle-container">
         <div class="mood-toggle">
@@ -70,16 +187,13 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <div class="hero-badge" onclick="showGayWalkPopup(event)">
-                    <span class="badge-text">GAY WALK: ON</span>
-                    <span class="badge-icon">🏳️‍🌈🏳️‍⚧️</span>
-                </div>
+
                 
                 <h1 class="hero-title">
-                    <span class="title-line">ai revolution happening</span>
-                    <span class="title-line">without us?</span>
-                    <span class="title-line massive-text gradient-text glitch-text">absolutely tf not,</span>
-                    <span class="title-line cute-text">bbs ⚡</span>
+                    <span class="title-line" data-text="ai revolution happening">ai revolution happening</span>
+                    <span class="title-line" data-text="without us?">without us?</span>
+                    <span class="title-line massive-text gradient-text glitch-text" data-text="absolutely tf not,">absolutely tf not,</span>
+                    <span class="title-line cute-text" data-text="bbs ⚡">bbs ⚡</span>
                 </h1>
                 
                 <div class="hero-equation">
@@ -111,9 +225,9 @@
         <div class="container">
             <div class="story-header">
                 <h2 class="story-title">
-                    <span class="title-word">my</span>
-                    <span class="title-word gradient-text">fucking</span>
-                    <span class="title-word">story</span>
+                    <span class="title-word" data-text="my">my</span>
+                    <span class="title-word gradient-text" data-text="fucking">fucking</span>
+                    <span class="title-word" data-text="story">story</span>
                 </h2>
             </div>
             
@@ -171,7 +285,7 @@
                     </h2>
                 </div>
                 
-                <form class="join-form" onsubmit="handleEmailSignup(event)">
+                <form class="join-form" id="emailForm" onsubmit="handleEmailSignup(event)">
                     <div class="form-container">
                         <input 
                             type="email" 
@@ -181,14 +295,51 @@
                             required
                             class="email-input"
                         >
-                        <button type="submit" class="submit-btn mega-sparkle-btn">
-                            <span>Join Us</span>
+                        <button type="submit" id="submitBtn" class="submit-btn mega-sparkle-btn">
+                            <span class="btn-text">Join Us</span>
+                            <span class="btn-loading" style="display: none;">
+                                <span class="spinner"></span> Processing...
+                            </span>
                         </button>
                     </div>
+                    
+                    <!-- GDPR Consent Checkbox -->
+                    <div class="consent-section">
+                        <label class="consent-checkbox">
+                            <input type="checkbox" id="consent" name="consent" required>
+                            <span class="checkmark"></span>
+                            <span class="consent-text">
+                                I consent to receiving email newsletters and updates from Queer Grid. 
+                                I understand I can unsubscribe at any time. 
+                                <a href="#privacy" class="privacy-link">Privacy Policy</a> | 
+                                <a href="#terms" class="privacy-link">Terms</a>
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <!-- Hidden UTM tracking fields -->
+                    <input type="hidden" id="utmSource" name="utmSource">
+                    <input type="hidden" id="utmMedium" name="utmMedium">
+                    <input type="hidden" id="utmCampaign" name="utmCampaign">
+                    <input type="hidden" id="source" name="source" value="website">
+                    
                     <p class="form-microcopy">
                         no spam, just revolutionary updates and occasional chaos reports 💅
                     </p>
+                    
+                    <div class="form-messages">
+                        <div class="success-message" id="successMessage" style="display: none;"></div>
+                        <div class="error-message" id="errorMessage" style="display: none;"></div>
+                    </div>
                 </form>
+                
+                <!-- Data Rights Information -->
+                <div class="data-rights-info">
+                    <p><small>
+                        🔒 Your privacy matters. You have the right to access, rectify, or delete your data at any time. 
+                        <a href="#" id="dataRightsLink" class="data-rights-link">Learn about your data rights</a>
+                    </small></p>
+                </div>
             </div>
         </div>
     </section>
