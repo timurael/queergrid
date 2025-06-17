@@ -96,13 +96,13 @@ if (IS_PRODUCTION) {
 processedScript = environmentDetection + '\n' + processedScript;
 
 // Create dist directory if it doesn't exist
-const distDir = path.join(__dirname, '../dist');
+const distDir = path.join(__dirname, '..');
 if (!fs.existsSync(distDir)) {
   fs.mkdirSync(distDir, { recursive: true });
 }
 
-// Write the processed script to dist
-const distScriptPath = path.join(__dirname, '../dist/script.js');
+// Write the processed script to root
+const distScriptPath = path.join(__dirname, '../script.js');
 fs.writeFileSync(distScriptPath, processedScript);
 
 // Create a config.js file for runtime configuration
@@ -129,7 +129,7 @@ window.QUEER_GRID_CONFIG = {
 };
 `;
 
-const configPath = path.join(__dirname, '../dist/config.js');
+const configPath = path.join(__dirname, '../config.js');
 fs.writeFileSync(configPath, configJs);
 
 // Update index.html to include config.js
@@ -141,8 +141,7 @@ const updatedIndexContent = indexContent.replace(
   '<script src="config.js"></script>\n    <script src="script.js"></script>'
 );
 
-const distIndexPath = path.join(__dirname, '../dist/index.html');
-fs.writeFileSync(distIndexPath, updatedIndexContent);
+fs.writeFileSync(indexPath, updatedIndexContent);
 
 // Create a deployment info file
 const deploymentInfo = {
@@ -159,11 +158,11 @@ const deploymentInfo = {
   }
 };
 
-const deploymentInfoPath = path.join(__dirname, '../dist/deployment-info.json');
+const deploymentInfoPath = path.join(__dirname, '../deployment-info.json');
 fs.writeFileSync(deploymentInfoPath, JSON.stringify(deploymentInfo, null, 2));
 
 console.log('✨ Build complete!');
-console.log('📁 Files created in dist/:');
+console.log('📁 Files created in root directory:');
 console.log('  - index.html (with config.js included)');
 console.log('  - script.js (environment-configured)');
 console.log('  - config.js (runtime configuration)');

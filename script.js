@@ -1,3 +1,59 @@
+
+// Environment detection and graceful degradation
+const ENVIRONMENT = 'production';
+const IS_PRODUCTION = ENVIRONMENT === 'production';
+
+// Override backend functions for production if backend is not available
+if (IS_PRODUCTION) {
+  // Check if backend is available
+  let backendAvailable = true;
+  
+  // Test backend connectivity
+  fetch(API_BASE_URL + '/health')
+    .catch(() => {
+      backendAvailable = false;
+      console.warn('🚨 Backend not available - running in frontend-only mode');
+      
+      // Show a friendly message to users
+      setTimeout(() => {
+        showNotification(
+          currentMode === 'cute' ? 
+          'hey bb! our backend is taking a nap 😴 email signup will be back soon!' : 
+          'BACKEND TEMPORARILY OFFLINE. EMAIL COLLECTION DISABLED. ⚡',
+          'info'
+        );
+      }, 2000);
+    });
+  
+  // Override email signup for production without backend
+  const originalHandleEmailSignup = handleEmailSignup;
+  handleEmailSignup = async function(event) {
+    event.preventDefault();
+    
+    if (!backendAvailable) {
+      showError(
+        currentMode === 'cute' ? 
+        'aww, our email system is sleeping! try again later, bb 💤' : 
+        'EMAIL SYSTEM OFFLINE. TRY AGAIN LATER. ⚡'
+      );
+      return;
+    }
+    
+    return originalHandleEmailSignup(event);
+  };
+  
+  // Override consent backend calls for production
+  const originalSendConsentToBackend = sendConsentToBackend;
+  sendConsentToBackend = async function(consentData) {
+    if (!backendAvailable) {
+      console.log('Consent saved locally only (backend unavailable)');
+      return;
+    }
+    
+    return originalSendConsentToBackend(consentData);
+  };
+}
+
 // ===== QUEER GRID DUAL MOOD REVOLUTION ===== //
 
 // ===== GDPR CONSENT MANAGEMENT ===== //
@@ -339,7 +395,7 @@ function scrollToStory() {
 
 // ===== EMAIL SIGNUP REVOLUTION =====
 // Configuration
-const API_BASE_URL = 'http://localhost:3001'; // Update for production
+const API_BASE_URL = 'https://your-backend-domain.com'; // Update for production
 
 async function handleEmailSignup(event) {
     event.preventDefault();
