@@ -1,3 +1,112 @@
+// ===== QUEER GRID DUAL MOOD REVOLUTION ===== //
+
+// ===== MOOD TOGGLE SYSTEM ===== //
+const moodToggle = document.getElementById('moodToggle');
+const html = document.documentElement;
+const posterStream = document.getElementById('posterStream');
+
+// Poster image list
+const posterImages = [
+    '9cdedb18a9890863f944403e4fe59350.jpg',
+    '630f003a7cd1d5026b2c5b0846fa485d.jpg',
+    '15e6cbc005353d9b1ec5f601247109f9.jpg',
+    '27511f9c1acb785b350f646c015f5ff5.jpg',
+    'c1531ac005b4c5fb19f24fae05419ddd.jpg',
+    '191f289e6a2ef9b290731b22c36b4b9e.jpg',
+    'd9dbcb1104eb16ab8c436ec1181b8a21.jpg',
+    'cdfe0e6c64e16752e1a909297f420c0d.jpg',
+    'e32dfff756cc3a43076ecb3bb9840cfb.jpg',
+    'b24876bcb00b1501e814aa7a781ea1f1.jpg',
+    '3a34365b08819858368cc75cbc3a9c7a.jpg',
+    'L&R 1 4 cover.jpg'
+];
+
+let currentMode = 'cute';
+let posters = [];
+let moodMouseX = 0;
+let moodMouseY = 0;
+
+// Initialize mood toggle
+if (moodToggle) {
+    moodToggle.addEventListener('click', toggleMood);
+}
+
+function toggleMood() {
+    currentMode = currentMode === 'cute' ? 'angry' : 'cute';
+    html.setAttribute('data-mode', currentMode);
+    
+    if (currentMode === 'angry') {
+        initializePosters();
+    } else {
+        clearPosters();
+    }
+}
+
+// Initialize poster stream for angry mode
+function initializePosters() {
+    clearPosters();
+    
+    posterImages.forEach((imageName, index) => {
+        const poster = document.createElement('img');
+        poster.src = `queer rage photos/${imageName}`;
+        poster.className = 'poster';
+        poster.alt = 'Queer rage poster';
+        
+        // Random positioning and rotation
+        const leftPosition = Math.random() * (window.innerWidth - 200);
+        const rotation = Math.random() * 30 - 15; // -15 to 15 degrees
+        const delay = index * 2; // Stagger the animations
+        
+        poster.style.left = `${leftPosition}px`;
+        poster.style.transform = `rotate(${rotation}deg)`;
+        poster.style.animationDelay = `${delay}s`;
+        
+        posterStream.appendChild(poster);
+        posters.push(poster);
+    });
+}
+
+function clearPosters() {
+    if (posterStream) {
+        posterStream.innerHTML = '';
+        posters = [];
+    }
+}
+
+// Mouse tracking for poster jitter effect
+document.addEventListener('mousemove', (e) => {
+    moodMouseX = e.clientX;
+    moodMouseY = e.clientY;
+    
+    if (currentMode === 'angry' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        jitterNearbyPosters();
+    }
+});
+
+function jitterNearbyPosters() {
+    posters.forEach(poster => {
+        const rect = poster.getBoundingClientRect();
+        const posterCenterX = rect.left + rect.width / 2;
+        const posterCenterY = rect.top + rect.height / 2;
+        
+        const distance = Math.sqrt(
+            Math.pow(moodMouseX - posterCenterX, 2) + 
+            Math.pow(moodMouseY - posterCenterY, 2)
+        );
+        
+        if (distance < 150) { // Within 150px of cursor
+            const jitterX = (Math.random() - 0.5) * 16; // ±8px
+            const jitterY = (Math.random() - 0.5) * 16; // ±8px
+            poster.style.transform += ` translate(${jitterX}px, ${jitterY}px)`;
+            
+            // Reset after a short delay
+            setTimeout(() => {
+                poster.style.transform = poster.style.transform.replace(/translate\([^)]*\)/g, '');
+            }, 100);
+        }
+    });
+}
+
 // ===== CAROUSEL ANIMATION =====
 let currentCarouselIndex = 0;
 const carouselTexts = document.querySelectorAll('.carousel-text');
@@ -402,6 +511,8 @@ function resetEmojiPositions() {
     });
 }
 
+
+
 // ===== GAY WALK BADGE SPECIAL POPUP =====
 function showGayWalkPopup(event) {
     event.stopPropagation(); // Prevent regular click popup
@@ -759,450 +870,4 @@ window.queerGridRevolution = {
     createSparkleEffect,
     createMultipleSparkles,
     showNotification
-};
-
-// ===== QUEER GRID - MINIMAL SPACESHIP INTERFACE =====
-// Mode toggle, poster grid, and interactive effects
-
-class QueerGridInterface {
-    constructor() {
-        this.currentMode = 'cute';
-        this.posters = [];
-        this.posterElements = [];
-        this.isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        this.vibrationEnabled = 'vibrate' in navigator && !this.isReducedMotion;
-        
-        this.init();
-    }
-
-    // Initialize the interface
-    init() {
-        this.setupModeToggle();
-        this.loadPosters();
-        this.setupMouseEffects();
-        this.setupAccessibility();
-        this.setupFormHandler();
-    }
-
-    // ===== MODE TOGGLE SYSTEM =====
-    setupModeToggle() {
-        const toggle = document.getElementById('mode-toggle');
-        const htmlElement = document.documentElement;
-        
-        if (!toggle) return;
-
-        // Set initial state
-        this.currentMode = toggle.checked ? 'cute' : 'angry';
-        htmlElement.setAttribute('data-mode', this.currentMode);
-
-        // Handle toggle changes
-        toggle.addEventListener('change', (e) => {
-            this.currentMode = e.target.checked ? 'cute' : 'angry';
-            this.switchMode(this.currentMode);
-        });
-
-        // Update ARIA states
-        toggle.addEventListener('change', (e) => {
-            const switchElement = e.target.closest('.toggle-switch');
-            if (switchElement) {
-                switchElement.setAttribute('aria-checked', e.target.checked);
-            }
-        });
-    }
-
-    // Switch between cute and angry modes
-    switchMode(mode) {
-        const htmlElement = document.documentElement;
-        
-        // Update data attribute for CSS
-        htmlElement.setAttribute('data-mode', mode);
-        
-        // Reposition posters with new effects
-        this.repositionPosters();
-        
-        // Update cursor style
-        this.updateCursorStyle(mode);
-        
-        // Trigger haptic feedback if available
-        if (this.vibrationEnabled) {
-            navigator.vibrate(50);
-        }
-        
-        // Announce mode change for screen readers
-        this.announceMode(mode);
-    }
-
-    // ===== POSTER GRID MANAGEMENT =====
-    async loadPosters() {
-        // Asset manifest for poster images
-        const posterPaths = [
-            'queer rage photos/9cdedb18a9890863f944403e4fe59350.jpg',
-            'queer rage photos/630f003a7cd1d5026b2c5b0846fa485d.jpg',
-            'queer rage photos/15e6cbc005353d9b1ec5f601247109f9.jpg',
-            'queer rage photos/27511f9c1acb785b350f646c015f5ff5.jpg',
-            'queer rage photos/c1531ac005b4c5fb19f24fae05419ddd.jpg',
-            'queer rage photos/191f289e6a2ef9b290731b22c36b4b9e.jpg',
-            'queer rage photos/d9dbcb1104eb16ab8c436ec1181b8a21.jpg',
-            'queer rage photos/cdfe0e6c64e16752e1a909297f420c0d.jpg',
-            'queer rage photos/e32dfff756cc3a43076ecb3bb9840cfb.jpg',
-            'queer rage photos/b24876bcb00b1501e814aa7a781ea1f1.jpg',
-            'queer rage photos/3a34365b08819858368cc75cbc3a9c7a.jpg',
-            'queer rage photos/L&R 1 4 cover.jpg'
-        ];
-
-        const posterGrid = document.querySelector('.poster-grid');
-        if (!posterGrid) return;
-
-        // Create poster elements
-        posterPaths.forEach((path, index) => {
-            const img = document.createElement('img');
-            img.src = path;
-            img.alt = ''; // Decorative images
-            img.className = 'poster';
-            img.loading = 'lazy';
-            
-            // Error handling
-            img.onerror = () => {
-                console.warn(`Failed to load poster: ${path}`);
-                img.style.display = 'none';
-            };
-
-            // Position poster randomly
-            this.positionPoster(img, index);
-            
-            posterGrid.appendChild(img);
-            this.posterElements.push(img);
-        });
-    }
-
-    // Position poster at random location
-    positionPoster(img, index) {
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-        const posterWidth = 200;
-        const posterHeight = 300;
-        
-        // Safe zones to avoid content overlap
-        const safeZones = [
-            { x: 0, y: 0, width: viewportWidth, height: 100 }, // Top toggle area
-            { x: (viewportWidth - 800) / 2, y: 100, width: 800, height: viewportHeight - 200 } // Main content area
-        ];
-        
-        let x, y, attempts = 0;
-        
-        // Try to find a position that doesn't overlap safe zones
-        do {
-            x = Math.random() * (viewportWidth - posterWidth);
-            y = Math.random() * (viewportHeight - posterHeight);
-            attempts++;
-        } while (this.isInSafeZone(x, y, posterWidth, posterHeight, safeZones) && attempts < 50);
-        
-        // Set position
-        img.style.left = `${x}px`;
-        img.style.top = `${y}px`;
-        
-        // Set rotation for angry mode
-        const rotation = 7 + Math.random() * 8; // 7-15 degrees
-        img.style.setProperty('--poster-rotation', `${rotation}deg`);
-    }
-
-    // Check if position overlaps with safe zones
-    isInSafeZone(x, y, width, height, safeZones) {
-        return safeZones.some(zone => {
-            return x < zone.x + zone.width &&
-                   x + width > zone.x &&
-                   y < zone.y + zone.height &&
-                   y + height > zone.y;
-        });
-    }
-
-    // Reposition posters (for mode changes)
-    repositionPosters() {
-        if (this.isReducedMotion) return;
-        
-        this.posterElements.forEach((poster, index) => {
-            // Small random offset for angry mode
-            if (this.currentMode === 'angry') {
-                const offsetX = (Math.random() - 0.5) * 20;
-                const offsetY = (Math.random() - 0.5) * 20;
-                poster.style.transform = `translate(${offsetX}px, ${offsetY}px) rotate(var(--poster-rotation))`;
-            } else {
-                poster.style.transform = '';
-            }
-        });
-    }
-
-    // ===== MOUSE EFFECTS =====
-    setupMouseEffects() {
-        if (this.isReducedMotion) return;
-        
-        let mouseTimeout;
-        
-        document.addEventListener('mousemove', (e) => {
-            if (this.currentMode === 'angry') {
-                clearTimeout(mouseTimeout);
-                mouseTimeout = setTimeout(() => {
-                    this.randomizePosterPositions();
-                }, 100); // Throttle to avoid excessive calls
-            }
-        });
-    }
-
-    // Randomize poster positions slightly on mouse move (angry mode)
-    randomizePosterPositions() {
-        if (this.isReducedMotion || this.currentMode !== 'angry') return;
-        
-        this.posterElements.forEach(poster => {
-            const offsetX = (Math.random() - 0.5) * 10;
-            const offsetY = (Math.random() - 0.5) * 10;
-            const currentTransform = poster.style.transform;
-            const baseTransform = currentTransform.replace(/translate\([^)]*\)/, '');
-            poster.style.transform = `translate(${offsetX}px, ${offsetY}px) ${baseTransform}`;
-        });
-    }
-
-    // Update cursor style
-    updateCursorStyle(mode) {
-        const body = document.body;
-        
-        if (mode === 'angry') {
-            // Create pixelated crosshair cursor
-            const cursorDataURL = this.createPixelatedCrosshair();
-            body.style.cursor = `url("${cursorDataURL}") 16 16, crosshair`;
-        } else {
-            body.style.cursor = '';
-        }
-    }
-
-    // Create pixelated crosshair cursor
-    createPixelatedCrosshair() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 32;
-        canvas.height = 32;
-        const ctx = canvas.getContext('2d');
-        
-        // Clear canvas
-        ctx.clearRect(0, 0, 32, 32);
-        
-        // Draw pixelated crosshair
-        ctx.fillStyle = '#ff0033';
-        ctx.imageSmoothingEnabled = false;
-        
-        // Vertical line
-        ctx.fillRect(14, 8, 4, 16);
-        // Horizontal line
-        ctx.fillRect(8, 14, 16, 4);
-        
-        return canvas.toDataURL();
-    }
-
-    // ===== ACCESSIBILITY =====
-    setupAccessibility() {
-        // Announce mode changes
-        this.createScreenReaderAnnouncer();
-        
-        // Handle reduced motion preferences
-        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-        mediaQuery.addListener(() => {
-            this.isReducedMotion = mediaQuery.matches;
-        });
-        
-        // Keyboard navigation for toggle
-        const toggle = document.getElementById('mode-toggle');
-        if (toggle) {
-            toggle.addEventListener('keydown', (e) => {
-                if (e.key === ' ' || e.key === 'Enter') {
-                    e.preventDefault();
-                    toggle.checked = !toggle.checked;
-                    toggle.dispatchEvent(new Event('change'));
-                }
-            });
-        }
-    }
-
-    // Create hidden element for screen reader announcements
-    createScreenReaderAnnouncer() {
-        const announcer = document.createElement('div');
-        announcer.id = 'screen-reader-announcer';
-        announcer.setAttribute('aria-live', 'polite');
-        announcer.setAttribute('aria-atomic', 'true');
-        announcer.className = 'visually-hidden';
-        document.body.appendChild(announcer);
-    }
-
-    // Announce mode change to screen readers
-    announceMode(mode) {
-        const announcer = document.getElementById('screen-reader-announcer');
-        if (announcer) {
-            const message = mode === 'cute' 
-                ? 'Switched to cute mode: soft pastel colors and gentle animations'
-                : 'Switched to angry mode: high contrast brutalist design with sharp edges';
-            announcer.textContent = message;
-        }
-    }
-
-    // ===== FORM HANDLING =====
-    setupFormHandler() {
-        const form = document.querySelector('.email-form');
-        if (!form) return;
-        
-        form.addEventListener('submit', (e) => {
-            this.handleEmailSignup(e);
-        });
-        
-        // Add button hover effects
-        const buttons = document.querySelectorAll('.submit-btn, .signal-btn');
-        buttons.forEach(button => {
-            button.addEventListener('mouseenter', () => {
-                if (this.vibrationEnabled && this.currentMode === 'angry') {
-                    navigator.vibrate(50);
-                }
-            });
-        });
-    }
-
-    // Handle email form submission
-    handleEmailSignup(event) {
-        event.preventDefault();
-        
-        const email = document.getElementById('email').value;
-        if (!email) return;
-        
-        // Basic email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            this.showMessage('please enter a valid email address', 'error');
-            return;
-        }
-        
-        // Show success message
-        this.showMessage('thanks for joining the revolution! 💅', 'success');
-        
-        // Clear form
-        document.getElementById('email').value = '';
-        
-        // Haptic feedback
-        if (this.vibrationEnabled) {
-            navigator.vibrate([100, 50, 100]);
-        }
-    }
-
-    // Show temporary message
-    showMessage(text, type = 'info') {
-        // Remove existing messages
-        const existingMessage = document.querySelector('.temp-message');
-        if (existingMessage) {
-            existingMessage.remove();
-        }
-        
-        // Create message element
-        const message = document.createElement('div');
-        message.className = `temp-message temp-message-${type}`;
-        message.textContent = text;
-        message.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: ${type === 'error' ? 'var(--angry-red)' : 'var(--primary-color)'};
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: var(--radius-md);
-            z-index: var(--z-toast);
-            font-family: var(--font-heading);
-            font-weight: var(--font-weight-bold);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transition: opacity var(--transition-medium);
-        `;
-        
-        document.body.appendChild(message);
-        
-        // Animate in
-        requestAnimationFrame(() => {
-            message.style.opacity = '1';
-        });
-        
-        // Remove after delay
-        setTimeout(() => {
-            message.style.opacity = '0';
-            setTimeout(() => {
-                if (message.parentNode) {
-                    message.remove();
-                }
-            }, 300);
-        }, 3000);
-        
-        // Announce to screen readers
-        const announcer = document.getElementById('screen-reader-announcer');
-        if (announcer) {
-            announcer.textContent = text;
-        }
-    }
-
-    // ===== RESPONSIVE HANDLING =====
-    handleResize() {
-        // Reposition posters on resize
-        this.posterElements.forEach((poster, index) => {
-            this.positionPoster(poster, index);
-        });
-    }
-}
-
-// ===== INITIALIZATION =====
-document.addEventListener('DOMContentLoaded', () => {
-    const interface = new QueerGridInterface();
-    
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            interface.handleResize();
-        }, 250);
-    });
-    
-    // Add page load animation
-    document.body.classList.add('loaded');
-});
-
-// ===== GLOBAL FUNCTIONS FOR BACKWARDS COMPATIBILITY =====
-function handleEmailSignup(event) {
-    // This function exists for backwards compatibility with the form onsubmit
-    // The actual handling is done by the QueerGridInterface class
-    event.preventDefault();
-}
-
-// ===== UTILITY FUNCTIONS =====
-// Debounce function for performance
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Check if element is in viewport
-function isInViewport(element) {
-    const rect = element.getBoundingClientRect();
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-    );
-}
-
-// ===== ERROR HANDLING =====
-window.addEventListener('error', (event) => {
-    console.error('Queer Grid Interface Error:', event.error);
-});
-
-window.addEventListener('unhandledrejection', (event) => {
-    console.error('Unhandled Promise Rejection:', event.reason);
-}); 
+}; 
