@@ -1,12 +1,12 @@
 {
-  "buildTime": "2025-06-17T23:20:21.879Z",
-  "environment": "development",
-  "apiBaseUrl": "http://localhost:3001",
+  "buildTime": "2025-06-17T23:28:35.872Z",
+  "environment": "production",
+  "apiBaseUrl": "https://your-backend-domain.com",
   "version": "1.0.0",
   "commit": "local-build",
   "features": {
     "consentPopup": true,
-    "emailSignup": true,
+    "emailSignup": false,
     "analytics": true,
     "gdprCompliance": true
   }

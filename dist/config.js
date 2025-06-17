@@ -1,10 +1,10 @@
 
 // Runtime configuration for Queer Grid
 window.QUEER_GRID_CONFIG = {
-  environment: 'development',
-  apiBaseUrl: 'http://localhost:3001',
+  environment: 'production',
+  apiBaseUrl: 'https://your-backend-domain.com',
   features: {
-    emailSignup: true, // Disable in production until backend is deployed
+    emailSignup: false, // Disable in production until backend is deployed
     analytics: true,
     consentPopup: true
   },

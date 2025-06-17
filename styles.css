@@ -1522,7 +1522,7 @@ body {
 @media (max-width: 768px) {
     .header {
         padding: 1rem 0;
-        top: 60px; /* Adjust for smaller mood toggle on mobile */
+        top: 55px; /* Better spacing for mobile mood toggle */
     }
     
     .mood-toggle-container {
@@ -1613,9 +1613,14 @@ body {
         gap: 1.5rem;
     }
     
+    /* Hide floating elements on mobile to reduce clutter */
+    .floating-elements {
+        display: none;
+    }
+    
     /* Add scroll padding to prevent content from being hidden behind fixed header */
     #story, #join, #signal {
-        scroll-margin-top: 140px; /* Account for mood toggle + smaller header on mobile */
+        scroll-margin-top: 130px; /* Account for mood toggle + smaller header on mobile */
     }
 }
 
@@ -1627,10 +1632,11 @@ body {
     
     .header {
         padding: 0.8rem 0;
+        top: 50px; /* Even tighter spacing for very small screens */
     }
     
     .hero {
-        padding: 9rem 0 4rem;
+        padding: 8rem 0 4rem; /* Adjusted for better mobile spacing */
     }
     
     .btn {

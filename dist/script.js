@@ -1,6 +1,6 @@
 
 // Environment detection and graceful degradation
-const ENVIRONMENT = 'development';
+const ENVIRONMENT = 'production';
 const IS_PRODUCTION = ENVIRONMENT === 'production';
 
 // Override backend functions for production if backend is not available
@@ -395,7 +395,7 @@ function scrollToStory() {
 
 // ===== EMAIL SIGNUP REVOLUTION =====
 // Configuration
-const API_BASE_URL = 'http://localhost:3001'; // Update for production
+const API_BASE_URL = 'https://your-backend-domain.com'; // Update for production
 
 async function handleEmailSignup(event) {
     event.preventDefault();
