@@ -401,34 +401,7 @@ body {
     z-index: 2;
 }
 
-.hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: var(--gradient-fire);
-    color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: var(--border-rad);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 2rem;
-    animation: badgePulse 3s ease-in-out infinite;
-    cursor: pointer;
-    transition: all 0.3s var(--smooth);
-}
 
-.hero-badge:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
-}
-
-@keyframes badgePulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 20, 147, 0.7); }
-    50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 20, 147, 0); }
-}
 
 .hero-title {
     font-family: var(--font-heading);
@@ -1255,80 +1228,4 @@ body {
 
 
 
-/* ===== GAY WALK SPECIAL POPUP ===== */
-.gay-walk-popup {
-    position: fixed;
-    z-index: 10001;
-    pointer-events: none;
-    opacity: 0;
-    transform: scale(0.7) translateX(20px);
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.gay-walk-popup.show {
-    opacity: 1;
-    transform: scale(1) translateX(0);
-}
-
-.gay-walk-popup.fade-out {
-    opacity: 0;
-    transform: scale(0.8) translateX(30px);
-}
-
-.gay-walk-popup-content {
-    background: linear-gradient(135deg, #FF1493, #E0218A, #C471ED);
-    color: white;
-    border-radius: 2rem;
-    padding: 2rem;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(255, 20, 147, 0.4);
-    min-width: 250px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(20px);
-}
-
-.gay-walk-flags {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    animation: vibeFloat 1.5s ease-in-out infinite;
-}
-
-.gay-walk-title {
-    font-family: var(--font-heading);
-    font-size: 1.4rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.gay-walk-subtitle {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.8rem;
-    opacity: 0.9;
-    font-style: italic;
-}
-
-.gay-walk-message {
-    font-size: 0.9rem;
-    font-weight: 500;
-    opacity: 0.8;
-    animation: badgePulse 2s ease-in-out infinite;
-}
-
-@keyframes gayWalkSparkle {
-    0% {
-        opacity: 1;
-        transform: translate(0, 0) scale(1) rotate(0deg);
-    }
-    50% {
-        opacity: 0.8;
-        transform: translate(calc((var(--end-x) - var(--start-x)) * 0.5), calc((var(--end-y) - var(--start-y)) * 0.5)) scale(1.2) rotate(180deg);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(calc(var(--end-x) - var(--start-x)), calc(var(--end-y) - var(--start-y))) scale(0.3) rotate(360deg);
-    }
-} 
+ 
