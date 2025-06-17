@@ -402,10 +402,6 @@ function resetEmojiPositions() {
     });
 }
 
-
-
-
-
 // ===== MOOD TOGGLE SYSTEM =====
 function initMoodToggle() {
     const moodToggle = document.getElementById('moodToggle');
@@ -485,28 +481,28 @@ function initMoodToggle() {
             // Update main headline
             if (heroTitle) {
                 const titleLines = heroTitle.querySelectorAll('.title-line');
-                if (titleLines[0]) titleLines[0].textContent = 'AI REVOLUTION HAPPENING';
-                if (titleLines[1]) titleLines[1].textContent = 'WITHOUT US?';
-                if (titleLines[2]) titleLines[2].textContent = 'FUCK THAT NOISE';
-                if (titleLines[3]) titleLines[3].textContent = 'BURN IT DOWN 🔥';
+                if (titleLines[0]) titleLines[0].textContent = 'ai revolution happening';
+                if (titleLines[1]) titleLines[1].textContent = 'without us?';
+                if (titleLines[2]) titleLines[2].textContent = 'fuck that noise';
+                if (titleLines[3]) titleLines[3].textContent = 'burn it down 🔥';
             }
             
             // Update story title
             if (storyTitle) {
                 const titleWords = storyTitle.querySelectorAll('.title-word');
-                if (titleWords[0]) titleWords[0].textContent = 'WHY';
-                if (titleWords[1]) titleWords[1].textContent = 'I\'M';
-                if (titleWords[2]) titleWords[2].textContent = 'ANGRY';
+                if (titleWords[0]) titleWords[0].textContent = 'why';
+                if (titleWords[1]) titleWords[1].textContent = 'i\'m';
+                if (titleWords[2]) titleWords[2].textContent = 'angry';
             }
             
             // Update join title
             if (joinTitle) {
-                joinTitle.textContent = 'JOIN THE RESISTANCE.';
+                joinTitle.textContent = 'join the resistance.';
             }
             
             // Update signal title
             if (telegramTitle) {
-                telegramTitle.textContent = 'FIGHT WITH US';
+                telegramTitle.textContent = 'fight with us';
             }
             
         } else {
