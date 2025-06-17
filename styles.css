@@ -1523,10 +1523,19 @@ body {
     .header {
         padding: 1rem 0;
         top: 55px; /* Better spacing for mobile mood toggle */
+        position: fixed;
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
     }
     
     .mood-toggle-container {
         padding: 0.8rem 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 101;
     }
     
     .mood-toggle {
@@ -1615,7 +1624,14 @@ body {
     
     /* Hide floating elements on mobile to reduce clutter */
     .floating-elements {
-        display: none;
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+    
+    /* Ensure proper content spacing */
+    .hero {
+        padding-top: 140px !important; /* Account for fixed header + mood toggle */
     }
     
     /* Add scroll padding to prevent content from being hidden behind fixed header */
@@ -1632,11 +1648,11 @@ body {
     
     .header {
         padding: 0.8rem 0;
-        top: 50px; /* Even tighter spacing for very small screens */
+        top: 45px; /* Even tighter spacing for very small screens */
     }
     
     .hero {
-        padding: 8rem 0 4rem; /* Adjusted for better mobile spacing */
+        padding: 120px 0 4rem !important; /* Adjusted for better mobile spacing */
     }
     
     .btn {
