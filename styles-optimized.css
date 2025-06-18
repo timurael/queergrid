@@ -725,4 +725,9 @@ img {
         transition: none !important;
         box-shadow: none !important;
     }
+}
+
+/* Hide netlify bot field */
+.hidden {
+    display: none;
 } 

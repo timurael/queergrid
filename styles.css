@@ -1167,6 +1167,11 @@ body {
     z-index: 10; /* Ensure join section stays above posters */
 }
 
+/* Hide netlify bot field */
+.hidden {
+    display: none;
+}
+
 .join-section::before {
     content: '';
     position: absolute;
