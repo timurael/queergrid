@@ -510,12 +510,15 @@ const AngryMode = {
 const EmailSystem = {
     async init() {
         const form = Performance.$(CONFIG.SELECTORS.emailForm);
-        if (form) {
+        if (form && !form.hasAttribute('data-netlify')) {
+            // Only add JavaScript handling if NOT using Netlify forms
             form.addEventListener('submit', this.handleSubmit.bind(this));
         }
         
-        // Check backend availability
-        await API.checkHealth();
+        // Check backend availability only if not using Netlify forms
+        if (form && !form.hasAttribute('data-netlify')) {
+            await API.checkHealth();
+        }
     },
 
     async handleSubmit(event) {

@@ -283,6 +283,13 @@ document.addEventListener('DOMContentLoaded', function() {
     if (moodToggle) {
         moodToggle.addEventListener('click', toggleMood);
     }
+    
+    // Check if form is using Netlify (has data-netlify attribute)
+    const emailForm = document.getElementById('emailForm');
+    if (emailForm && !emailForm.hasAttribute('data-netlify')) {
+        // Only add JavaScript handling if NOT using Netlify forms
+        emailForm.addEventListener('submit', handleEmailSignup);
+    }
 });
 
 function toggleMood() {
