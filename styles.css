@@ -210,7 +210,7 @@ body {
 /* ===== POSTER STREAM - ANGRY MODE ===== */
 .poster-stream {
     position: fixed;
-    top: 0;
+    top: 70vh; /* Start from end of main section on desktop */
     left: 0;
     width: 100%;
     height: 100vh;
@@ -230,13 +230,14 @@ body {
     width: 200px;
     height: auto;
     object-fit: cover;
-    opacity: 1;
+    opacity: 0.8;
     filter: none;
     mix-blend-mode: multiply;
     border: 1px solid #39ff14;
     box-shadow: inset 0 0 20px rgba(57, 255, 20, 0.1);
     transition: all 0.3s ease;
     will-change: transform;
+    z-index: 1; /* Ensure posters stay behind text */
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -246,16 +247,56 @@ body {
     
     .poster-stream .poster:hover {
         transform: scale(1.1) rotate(0deg) !important;
-        z-index: 10;
+        z-index: 2; /* Only hover brings to front, but still behind text */
     }
 }
 
 @keyframes posterFloat {
     0% {
-        transform: translateY(100vh) rotate(7deg);
+        transform: translateY(30vh) rotate(7deg); /* Start from within visible area */
     }
     100% {
         transform: translateY(-120vh) rotate(-15deg);
+    }
+}
+
+/* Desktop: Posters start from story section */
+@media (min-width: 769px) {
+    .poster-stream {
+        top: 100vh; /* Start when the story section begins - perfect timing for birth */
+    }
+    
+    .poster-stream .poster {
+        opacity: 0.7; /* Slightly more transparent on desktop */
+    }
+}
+
+/* Mobile: Enhanced text readability - posters stay completely behind text */
+@media (max-width: 768px) {
+    .poster-stream {
+        top: 0;
+        z-index: -1; /* Force posters completely behind everything on mobile */
+    }
+    
+    .poster-stream .poster {
+        opacity: 0.3; /* Much more transparent on mobile */
+        width: 150px; /* Smaller posters on mobile */
+        mix-blend-mode: screen; /* Better blending for readability */
+        filter: blur(1px); /* Slight blur to ensure text readability */
+    }
+    
+    .poster-stream .poster:hover {
+        z-index: -1; /* Ensure hover never brings to front on mobile */
+        opacity: 0.4;
+    }
+    
+    @keyframes posterFloat {
+        0% {
+            transform: translateY(100vh) rotate(7deg);
+        }
+        100% {
+            transform: translateY(-120vh) rotate(-15deg);
+        }
     }
 }
 
@@ -798,6 +839,7 @@ body {
         radial-gradient(circle at 30% 40%, rgba(255, 20, 147, 0.15) 0%, transparent 50%),
         radial-gradient(circle at 70% 60%, rgba(168, 230, 207, 0.15) 0%, transparent 50%),
         radial-gradient(circle at 50% 20%, rgba(196, 113, 237, 0.1) 0%, transparent 50%);
+    z-index: 10; /* Ensure hero content stays above posters */
 }
 
 :root[data-mode="angry"] .hero {
@@ -952,6 +994,7 @@ body {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(20px);
     position: relative;
+    z-index: 10; /* Ensure story content stays above posters */
 }
 
 .story-header {
@@ -1121,6 +1164,7 @@ body {
     background: var(--gradient-chaos);
     position: relative;
     overflow: hidden;
+    z-index: 10; /* Ensure join section stays above posters */
 }
 
 .join-section::before {
@@ -1223,6 +1267,8 @@ body {
         radial-gradient(circle at 30% 30%, rgba(18, 194, 233, 0.15) 0%, transparent 50%),
         radial-gradient(circle at 70% 70%, rgba(255, 20, 147, 0.1) 0%, transparent 50%);
     text-align: center;
+    z-index: 10; /* Ensure telegram section stays above posters */
+    position: relative;
 }
 
 .telegram-header {

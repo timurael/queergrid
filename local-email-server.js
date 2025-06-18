@@ -4,7 +4,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const app = express();
-const PORT = 3001;
+const PORT = 3002;
 const EMAILS_FILE = path.join(__dirname, 'collected-emails.json');
 
 // Middleware

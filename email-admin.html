@@ -243,7 +243,7 @@
             <button class="btn btn-primary" onclick="refreshEmails()">
                 🔄 Refresh
             </button>
-            <a href="http://localhost:3001/api/admin/emails/export" class="btn btn-secondary" target="_blank">
+            <a href="http://localhost:3002/api/admin/emails/export" class="btn btn-secondary" target="_blank">
                 📥 Export CSV
             </a>
             <a href="index.html" class="btn btn-secondary">
@@ -270,7 +270,7 @@
         
         async function loadEmails() {
             try {
-                const response = await fetch('http://localhost:3001/api/admin/emails');
+                const response = await fetch('http://localhost:3002/api/admin/emails');
                 const data = await response.json();
                 
                 if (response.ok) {

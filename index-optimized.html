@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="cute">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Performance optimizations -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="#FF1493">
+    <meta name="color-scheme" content="light dark">
+    
+    <!-- Title and SEO -->
+    <title>Queer Grid - AI Revolution Happening Without Us? Absolutely TF Not! ⚡</title>
+    <meta name="description" content="The queer tech & art collective breaking systems and building better ones. Accountability circles + creative chaos + community.">
+    <meta name="keywords" content="queer tech, AI revolution, accountability circles, community, LGBTQ+, technology, art collective">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://queergrid.org/">
+    <meta property="og:title" content="Queer Grid - AI Revolution">
+    <meta property="og:description" content="The queer tech & art collective breaking systems and building better ones.">
+    <meta property="og:image" content="/logo/logocute.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://queergrid.org/">
+    <meta property="twitter:title" content="Queer Grid - AI Revolution">
+    <meta property="twitter:description" content="The queer tech & art collective breaking systems and building better ones.">
+    <meta property="twitter:image" content="/logo/logocute.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/logo/logocute.png">
+    <link rel="apple-touch-icon" href="/logo/logocute.png">
+    
+    <!-- Resource hints for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    
+    <!-- Critical CSS inline -->
+    <style>
+        /* Critical CSS for above-the-fold content */
+        :root {
+            --pink-primary: #FF1493;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-body);
+            line-height: 1.6;
+            color: #2d2d2d;
+            background: linear-gradient(135deg, #fafaff 0%, #fff5f8 50%, #f0fff4 100%);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .mood-toggle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60px;
+        }
+        
+        .hero {
+            padding: calc(60px + 80px + 3rem) 0 3rem;
+            text-align: center;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(1rem, 5vw, 3rem);
+        }
+        
+        /* Loading spinner */
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            display: none;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--pink-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    
+    <!-- Font loading with font-display swap for performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Main CSS (defer loading) -->
+    <link rel="preload" href="styles-optimized.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="styles-optimized.css"></noscript>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="logo/logocute.png" as="image">
+    <link rel="preload" href="logo/logonotcute.png" as="image">
+    <link rel="preload" href="app-optimized.js" as="script">
+    
+    <!-- Service Worker Registration -->
+    <script>
+        // Register service worker for caching and offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('🚀 Service Worker registered:', registration);
+                        
+                        // Check for updates
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // New version available
+                                    if (confirm('New version available! Refresh to update?')) {
+                                        window.location.reload();
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.warn('Service Worker registration failed:', error);
+                    });
+            });
+        }
+        
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            if ('performance' in window) {
+                const perfData = performance.getEntriesByType('navigation')[0];
+                console.log('📊 Page Load Performance:', {
+                    domContentLoaded: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
+                    loadComplete: perfData.loadEventEnd - perfData.loadEventStart,
+                    totalTime: perfData.loadEventEnd - perfData.fetchStart
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- Loading spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- GDPR Consent Popup (lazy-loaded content) -->
+    <div id="consentPopup" class="consent-popup" style="display: none;" aria-hidden="true">
+        <div class="consent-overlay"></div>
+        <div class="consent-modal" role="dialog" aria-labelledby="consent-title" aria-describedby="consent-description">
+            <div class="consent-header">
+                <h3 class="consent-title" id="consent-title">
+                    <span class="cute-mode-text">hey bb, let's talk privacy! 🍪✨</span>
+                    <span class="angry-mode-text">YOUR DATA, YOUR RIGHTS ⚡</span>
+                </h3>
+            </div>
+            
+            <div class="consent-content">
+                <div class="consent-section">
+                    <p class="consent-text" id="consent-description">
+                        <span class="cute-mode-text">
+                            we use cookies and collect some data to make this site work and keep you updated on our queer tech revolution. 
+                            we're super transparent about it because <strong>your privacy matters</strong> 💖
+                        </span>
+                        <span class="angry-mode-text">
+                            we collect data to fuel the revolution and keep you informed. 
+                            <strong>we're transparent as fuck</strong> because your privacy is non-negotiable.
+                        </span>
+                    </p>
+                </div>
+
+                <div class="consent-options">
+                    <div class="consent-category">
+                        <div class="consent-item">
+                            <label class="consent-checkbox essential">
+                                <input type="checkbox" id="essentialCookies" checked disabled aria-describedby="essential-desc">
+                                <span class="checkmark"></span>
+                                <div class="consent-label">
+                                    <strong>Essential</strong>
+                                    <p id="essential-desc">Required for the site to function. Cannot be disabled.</p>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <div class="consent-item">
+                            <label class="consent-checkbox">
+                                <input type="checkbox" id="analyticsCookies" aria-describedby="analytics-desc">
+                                <span class="checkmark"></span>
+                                <div class="consent-label">
+                                    <strong>Analytics</strong>
+                                    <p id="analytics-desc">Privacy-friendly analytics to improve our site (no tracking across sites).</p>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <div class="consent-item">
+                            <label class="consent-checkbox">
+                                <input type="checkbox" id="marketingConsent" checked aria-describedby="marketing-desc">
+                                <span class="checkmark"></span>
+                                <div class="consent-label">
+                                    <strong>Email Updates</strong>
+                                    <p id="marketing-desc">Consent to receive our newsletter and community updates.</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="consent-details">
+                    <details class="privacy-details">
+                        <summary>What data do we collect? 📋</summary>
+                        <div class="privacy-content">
+                            <ul>
+                                <li><strong>Email addresses:</strong> For newsletter and community updates</li>
+                                <li><strong>Basic analytics:</strong> Page visits, referrer info (anonymized)</li>
+                                <li><strong>Technical data:</strong> IP address, browser type (for security)</li>
+                                <li><strong>Consent records:</strong> Your privacy choices and when you made them</li>
+                            </ul>
+                            <p><strong>We never:</strong> Sell your data, track you across sites, or share with advertisers.</p>
+                        </div>
+                    </details>
+                    
+                    <details class="privacy-details">
+                        <summary>Your rights under GDPR 🛡️</summary>
+                        <div class="privacy-content">
+                            <ul>
+                                <li><strong>Access:</strong> Get a copy of your data</li>
+                                <li><strong>Rectification:</strong> Correct inaccurate data</li>
+                                <li><strong>Erasure:</strong> Delete your data</li>
+                                <li><strong>Restriction:</strong> Limit how we process your data</li>
+                                <li><strong>Portability:</strong> Transfer your data elsewhere</li>
+                            </ul>
+                            <p>Contact us at <a href="mailto:privacy@queergrid.org">privacy@queergrid.org</a> to exercise your rights.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+            
+            <div class="consent-actions">
+                <button id="acceptAllConsent" class="btn btn-primary consent-btn" data-action="acceptAll">
+                    <span class="cute-mode-text">Accept All 💖</span>
+                    <span class="angry-mode-text">Accept All ⚡</span>
+                </button>
+                <button id="acceptSelectedConsent" class="btn btn-secondary consent-btn" data-action="acceptSelected">
+                    <span class="cute-mode-text">Save My Choices</span>
+                    <span class="angry-mode-text">Save Choices</span>
+                </button>
+                <button id="rejectAllConsent" class="btn btn-outline consent-btn" data-action="rejectAll">
+                    <span class="cute-mode-text">Essential Only</span>
+                    <span class="angry-mode-text">Essential Only</span>
+                </button>
+            </div>
+            
+            <div class="consent-footer">
+                <p>
+                    <a href="#privacy" class="privacy-link">Privacy Policy</a> | 
+                    <a href="#terms" class="privacy-link">Terms</a> | 
+                    <a href="javascript:void(0)" onclick="showConsentPopup()" class="privacy-link">Manage Consent</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mood Toggle - Always Visible at Top -->
+    <div class="mood-toggle-container">
+        <div class="mood-toggle">
+            <span class="mood-label mood-label-left">feeling cute</span>
+            <button class="mood-switch" id="moodToggle" aria-label="Toggle between cute and rage mode" type="button">
+                <span class="mood-switch-slider"></span>
+            </button>
+            <span class="mood-label mood-label-right">feeling rage</span>
+        </div>
+    </div>
+
+    <!-- Angry Mode Poster Stream -->
+    <div class="poster-stream" id="posterStream" aria-hidden="true"></div>
+
+    <!-- Floating Elements (reduced for performance) -->
+    <div class="floating-elements" aria-hidden="true">
+        <div class="floating-emoji large">🧚</div>
+        <div class="floating-emoji small">✨</div>
+        <div class="floating-emoji">🌟</div>
+        <div class="floating-emoji large">💫</div>
+        <div class="floating-emoji small">🧚‍♀️</div>
+        <div class="floating-emoji">⭐</div>
+        <div class="floating-emoji large">🌈</div>
+        <div class="floating-emoji">🏳️‍⚧️</div>
+        <div class="floating-emoji small">🏳️‍🌈</div>
+        <div class="floating-emoji">🧠</div>
+        <div class="floating-emoji large">💻</div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <div class="logo">
+                <img src="logo/logocute.png" alt="Queer Grid Logo" class="logo-image" width="64" height="64" loading="eager">
+                <span class="logo-subtitle">celebrating our creative chaos since the dawn of time</span>
+            </div>
+            <nav class="nav" role="navigation" aria-label="Main navigation">
+                <a href="#story" class="nav-link">My Story</a>
+                <a href="#join" class="nav-link">Join Us</a>
+                <a href="#signal" class="nav-link telegram-nav">Get In ⚡</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" role="main">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="title-line" data-text="ai revolution happening">ai revolution happening</span>
+                    <span class="title-line" data-text="without us?">without us?</span>
+                    <span class="title-line massive-text gradient-text glitch-text" data-text="absolutely tf not,">absolutely tf not,</span>
+                    <span class="title-line cute-text" data-text="bbs ⚡">bbs ⚡</span>
+                </h1>
+                
+                <div class="hero-equation">
+                    <span class="equation-part">accountability circles</span>
+                    <span class="equation-symbol">+</span>
+                    <span class="equation-part">creative chaos</span>
+                    <span class="equation-symbol">+</span>
+                    <span class="equation-part">community</span>
+                    <span class="equation-symbol">=</span>
+                    <span class="equation-result">the revolution we deserve</span>
+                </div>
+                
+                <div class="hero-description">
+                    <p class="cute-mode-text">
+                        we're the queer tech & art collective breaking systems and building better ones.
+                        come for the accountability circles, stay for the creative chaos ✨
+                    </p>
+                    <p class="angry-mode-text">
+                        WE'RE THE QUEER TECH COLLECTIVE DISMANTLING BROKEN SYSTEMS.
+                        ACCOUNTABILITY CIRCLES. CREATIVE DESTRUCTION. COMMUNITY POWER. ⚡
+                    </p>
+                </div>
+                
+                <div class="hero-actions">
+                    <a href="#join" class="btn btn-primary">
+                        <span class="cute-mode-text">join our chaos 💖</span>
+                        <span class="angry-mode-text">JOIN THE REVOLUTION ⚡</span>
+                    </a>
+                    <button onclick="scrollToStory()" class="btn btn-secondary">
+                        <span class="cute-mode-text">learn more ✨</span>
+                        <span class="angry-mode-text">READ THE STORY ⚡</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Load JavaScript optimally -->
+    <script>
+        // Show loading spinner
+        document.getElementById('loadingSpinner').style.display = 'block';
+        
+        // Hide loading spinner when page is ready
+        window.addEventListener('load', () => {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        });
+    </script>
+    
+    <!-- Lazy load main JavaScript -->
+    <script src="app-optimized.js" defer></script>
+    
+    <!-- Fallback for no JavaScript -->
+    <noscript>
+        <div style="padding: 2rem; text-align: center; background: #ffe6f2; color: #d63384; border-radius: 0.5rem; margin: 2rem;">
+            <h3>JavaScript Required</h3>
+            <p>This site uses JavaScript for the best experience. Please enable JavaScript in your browser.</p>
+        </div>
+    </noscript>
+</body>
+</html> 

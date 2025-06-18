@@ -29,7 +29,7 @@ npx http-server -p 8000
 ### 3. Access Your Site
 - **Website**: http://localhost:8000
 - **Admin Dashboard**: http://localhost:8000/email-admin.html
-- **Direct API**: http://localhost:3001
+- **Direct API**: http://localhost:3002
 
 ## 📊 Features
 
@@ -52,7 +52,7 @@ npx http-server -p 8000
 
 ### Email Collection Flow
 1. User fills out email form on your website
-2. Form submits to `http://localhost:3001/api/email/subscribe`
+2. Form submits to `http://localhost:3002/api/email/subscribe`
 3. Server validates email and consent
 4. Email saved to `collected-emails.json` with metadata:
    - Email address
@@ -110,7 +110,7 @@ Access at `http://localhost:8000/email-admin.html`
 ### Change Port
 Edit `local-email-server.js`:
 ```javascript
-const PORT = 3001; // Change to your preferred port
+const PORT = 3002; // Change to your preferred port
 ```
 
 Then update `script.js`:
@@ -161,8 +161,8 @@ const newSubscription = {
 
 **Email server won't start:**
 ```bash
-# Check if port 3001 is already in use
-lsof -i :3001
+# Check if port 3002 is already in use
+lsof -i :3002
 
 # Kill existing process if needed
 kill -9 <PID>
@@ -174,14 +174,14 @@ kill -9 <PID>
 - Check server console for error messages
 
 **Frontend can't connect:**
-- Verify email server is running on port 3001
+- Verify email server is running on port 3002
 - Check browser console for CORS errors
 - Ensure `API_BASE_URL` is set correctly
 
 **Dashboard shows errors:**
 - Make sure email server is running
 - Check network tab in browser dev tools
-- Verify URLs are correct (localhost:3001)
+- Verify URLs are correct (localhost:3002)
 
 ### Debug Mode
 Start server with verbose logging:

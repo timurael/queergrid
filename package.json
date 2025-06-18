@@ -1,19 +1,25 @@
 {
-  "name": "queer-grid-backend",
-  "version": "1.0.0",
-  "description": "GDPR-compliant email collection backend for Queer Grid",
-  "main": "server.js",
+  "name": "queer-grid-optimized",
+  "version": "1.2.0",
+  "description": "Performance-optimized Queer Grid with GDPR-compliant email collection",
+  "main": "optimized-server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "email-server": "node local-email-server.js",
-    "email-dev": "nodemon local-email-server.js",
+    "start": "node optimized-server.js",
+    "dev": "concurrently \"npm run email-server\" \"npm run serve\"",
+    "email-server": "node optimized-server.js",
+    "email-dev": "nodemon optimized-server.js",
+    "serve": "python3 -m http.server 8001",
     "test": "jest",
     "db:migrate": "npx prisma migrate dev",
     "db:deploy": "npx prisma migrate deploy",
     "db:generate": "npx prisma generate",
-    "build": "node scripts/build-production.js",
-    "build:dev": "NODE_ENV=development node scripts/build-production.js"
+    "build": "npm run minify-js && npm run minify-css && npm run optimize-images",
+    "build:dev": "NODE_ENV=development node scripts/build-production.js",
+    "minify-js": "terser app-optimized.js -o app-optimized.min.js -c -m --source-map",
+    "minify-css": "cleancss -o styles-optimized.min.css styles-optimized.css --source-map",
+    "optimize-images": "imagemin 'queer rage photos/*.jpg' --out-dir='optimized-images' --plugin=imagemin-mozjpeg --plugin=imagemin-pngquant",
+    "lighthouse": "lighthouse http://localhost:8001 --output html --output-path lighthouse-report.html --chrome-flags='--headless'",
+    "analyze": "npm run lighthouse && echo 'Performance report generated: lighthouse-report.html'"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -21,6 +27,7 @@
     "express-validator": "^7.0.1",
     "helmet": "^7.1.0",
     "cors": "^2.8.5",
+    "compression": "^1.7.4",
     "dotenv": "^16.3.1",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
@@ -38,7 +45,14 @@
   "devDependencies": {
     "nodemon": "^3.0.1",
     "jest": "^29.7.0",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "concurrently": "^8.2.2",
+    "terser": "^5.24.0",
+    "clean-css-cli": "^5.6.2",
+    "lighthouse": "^11.3.0",
+    "imagemin": "^8.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^9.0.2"
   },
   "keywords": [
     "gdpr",

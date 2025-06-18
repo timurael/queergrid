@@ -1,5 +1,5 @@
 // ===== CONFIGURATION =====
-const API_BASE_URL = 'http://localhost:3001'; // Local email collection server
+const API_BASE_URL = 'http://localhost:3002'; // Local email collection server
 
 // Environment detection and graceful degradation
 const ENVIRONMENT = 'production';
@@ -288,6 +288,9 @@ document.addEventListener('DOMContentLoaded', function() {
     posterStream = document.getElementById('posterStream');
     moodToggle = document.getElementById('moodToggle');
     
+    // Initialize correct logo on page load
+    switchLogo();
+    
     // Initialize mood toggle
     if (moodToggle) {
         moodToggle.addEventListener('click', toggleMood);
@@ -298,6 +301,9 @@ function toggleMood() {
     currentMode = currentMode === 'cute' ? 'angry' : 'cute';
     html.setAttribute('data-mode', currentMode);
     
+    // Switch logo based on mood
+    switchLogo();
+    
     if (currentMode === 'angry') {
         initializePosters();
         initializeAngryMode();
@@ -305,6 +311,16 @@ function toggleMood() {
         clearPosters();
         clearAngryMode();
     }
+}
+
+// Function to switch logo based on mood
+function switchLogo() {
+    const logoImages = document.querySelectorAll('.logo-image');
+    const newLogoSrc = currentMode === 'cute' ? 'logo/logocute.png' : 'logo/logonotcute.png';
+    
+    logoImages.forEach(logoImg => {
+        logoImg.src = newLogoSrc;
+    });
 }
 
 // Initialize poster stream for angry mode
@@ -513,9 +529,21 @@ async function handleEmailSignup(event) {
         
     } catch (error) {
         console.error('Subscription error:', error);
-        const errorMsg = 'network hiccup in the matrix 🌐 check your connection?';
+        
+        // More helpful error message for local development
+        let errorMsg;
+        if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+            errorMsg = currentMode === 'cute' ? 
+                'oops bb! the local email server isn\'t running 😅 check the setup guide!' : 
+                'LOCAL EMAIL SERVER OFFLINE. CHECK SETUP INSTRUCTIONS. ⚡';
+        } else {
+            errorMsg = currentMode === 'cute' ? 
+                'network hiccup in the matrix 🌐 try again in a moment?' :
+                'NETWORK ERROR. RETRY REVOLUTION. 🌐';
+        }
+        
+        // Only show error, don't auto-scroll to avoid page jumping
         showError(errorMsg);
-        showNotification(errorMsg, 'error');
         
         // Track network error
         trackEvent('email_subscription_network_error', {
@@ -1339,8 +1367,8 @@ function showSuccess(message) {
         successElement.textContent = message;
         successElement.style.display = 'block';
         
-        // Scroll message into view
-        successElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // Don't auto-scroll to success message - let users naturally see it
+        // This prevents unwanted page jumping on form submission
     }
 }
 
@@ -1350,8 +1378,8 @@ function showError(message) {
         errorElement.textContent = message;
         errorElement.style.display = 'block';
         
-        // Scroll message into view
-        errorElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // Don't auto-scroll to error - this was causing unwanted page jumping
+        // Users can see the error message without forced scrolling
     }
 }
 
