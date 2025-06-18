@@ -558,9 +558,10 @@ const EmailSystem = {
             Effects.createExplosion(Performance.$('#submitBtn'));
             
         } catch (error) {
-            const errorMsg = AppState.get('backendAvailable') 
-                ? 'Something went wrong. Please try again.'
-                : 'Local server not running. Please start the email server.';
+            // Always show generic error message regardless of backend status
+            const errorMsg = AppState.get('currentMode') === 'cute' 
+                ? 'oops! something went wrong. please try again later, bb 💖'
+                : 'SUBMISSION ERROR. TRY AGAIN LATER. ⚡';
             UI.showMessage(errorMsg, 'error');
             
         } finally {

@@ -10,23 +10,12 @@ if (IS_PRODUCTION) {
   // Check if backend is available
   let backendAvailable = true;
   
-  // Test backend connectivity
+  // Test backend connectivity (silently)
   fetch(API_BASE_URL + '/health')
     .catch(() => {
       backendAvailable = false;
       console.warn('🚨 Backend not available - running in frontend-only mode');
-      
-      // Show a friendly message to users
-      setTimeout(() => {
-        if (typeof showNotification === 'function') {
-          showNotification(
-            currentMode === 'cute' ? 
-            'hey bb! our backend is taking a nap 😴 email signup will be back soon!' : 
-            'BACKEND TEMPORARILY OFFLINE. EMAIL COLLECTION DISABLED. ⚡',
-            'info'
-          );
-        }
-      }, 2000);
+      // No user notification - handle gracefully in background
     });
   
   // Override email signup for production without backend
@@ -35,13 +24,12 @@ if (IS_PRODUCTION) {
     event.preventDefault();
     
     if (!backendAvailable) {
-      if (typeof showError === 'function') {
-        showError(
-          currentMode === 'cute' ? 
-          'aww, our email system is sleeping! try again later, bb 💤' : 
-          'EMAIL SYSTEM OFFLINE. TRY AGAIN LATER. ⚡'
-        );
-      }
+      // Gracefully handle - just show normal form validation
+      showError(
+        currentMode === 'cute' ? 
+        'oops! something went wrong. please try again later, bb 💖' : 
+        'SUBMISSION ERROR. TRY AGAIN LATER. ⚡'
+      );
       return;
     }
     
