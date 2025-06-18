@@ -52,6 +52,213 @@ if (IS_PRODUCTION) {
 
 // ===== QUEER GRID DUAL MOOD REVOLUTION ===== //
 
+// ===== COUNTDOWN TIMER FUNCTIONALITY ===== //
+let countdownInterval;
+
+// Target date: July 1st, 2025, 8 PM European Central Time (ETC/CET)
+const targetDate = new Date('2025-07-01T20:00:00+02:00'); // Using +02:00 for CEST (summer time)
+
+function initializeCountdown() {
+    updateCountdown();
+    // Update every second
+    countdownInterval = setInterval(updateCountdown, 1000);
+}
+
+function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = targetDate.getTime() - now;
+    
+    // If countdown is finished
+    if (distance < 0) {
+        clearInterval(countdownInterval);
+        displayCountdownFinished();
+        return;
+    }
+    
+    // Calculate time units
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    // Update display elements
+    const daysElement = document.getElementById('days');
+    const hoursElement = document.getElementById('hours');
+    const minutesElement = document.getElementById('minutes');
+    const secondsElement = document.getElementById('seconds');
+    
+    if (daysElement) daysElement.textContent = formatTimeUnit(days);
+    if (hoursElement) hoursElement.textContent = formatTimeUnit(hours);
+    if (minutesElement) minutesElement.textContent = formatTimeUnit(minutes);
+    if (secondsElement) secondsElement.textContent = formatTimeUnit(seconds);
+    
+    // Add sparkle effect when time changes
+    if (seconds % 10 === 0) {
+        triggerCountdownSparkle();
+    }
+}
+
+function formatTimeUnit(unit) {
+    return unit.toString().padStart(2, '0');
+}
+
+function displayCountdownFinished() {
+    const countdownTimer = document.getElementById('countdownTimer');
+    if (countdownTimer) {
+        countdownTimer.innerHTML = `
+            <div class="countdown-finished">
+                <h3 class="finished-title">
+                    <span class="cute-mode-text">THE REVOLUTION HAS BEGUN! 🎉</span>
+                    <span class="angry-mode-text">TIME TO RISE UP! ⚡</span>
+                </h3>
+                <p class="finished-message">
+                    <span class="cute-mode-text">join us now, bb! the magic is happening ✨</span>
+                    <span class="angry-mode-text">THE UPRISING IS LIVE. GET IN NOW. 🔥</span>
+                </p>
+            </div>
+        `;
+        
+        // Create mega celebration effect
+        createMegaSparkleExplosion();
+        triggerCelebrationAnimations();
+    }
+}
+
+function triggerCountdownSparkle() {
+    const timeUnits = document.querySelectorAll('.time-unit');
+    timeUnits.forEach((unit, index) => {
+        setTimeout(() => {
+            createSparkleEffect(unit);
+        }, index * 100);
+    });
+}
+
+function triggerCelebrationAnimations() {
+    // Add celebration class to body for global effects
+    document.body.classList.add('celebration-mode');
+    
+    // Create floating celebration emojis
+    const celebrationEmojis = ['🎉', '🎊', '✨', '🌟', '💫', '🚀', '⚡', '💖'];
+    
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            const emoji = celebrationEmojis[Math.floor(Math.random() * celebrationEmojis.length)];
+            createFloatingCelebrationEmoji(emoji);
+        }, i * 100);
+    }
+    
+    // Remove celebration mode after 10 seconds
+    setTimeout(() => {
+        document.body.classList.remove('celebration-mode');
+    }, 10000);
+}
+
+function createFloatingCelebrationEmoji(emoji) {
+    const emojiElement = document.createElement('div');
+    emojiElement.textContent = emoji;
+    emojiElement.style.cssText = `
+        position: fixed;
+        font-size: 2rem;
+        pointer-events: none;
+        z-index: 10000;
+        left: ${Math.random() * window.innerWidth}px;
+        top: ${window.innerHeight}px;
+        animation: celebrationFloat 3s ease-out forwards;
+    `;
+    
+    document.body.appendChild(emojiElement);
+    
+    // Remove after animation
+    setTimeout(() => {
+        if (emojiElement.parentNode) {
+            emojiElement.parentNode.removeChild(emojiElement);
+        }
+    }, 3000);
+}
+
+// Add celebration float animation to CSS dynamically
+function addCelebrationStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes celebrationFloat {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-${window.innerHeight + 100}px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .celebration-mode {
+            animation: celebrationPulse 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes celebrationPulse {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.1) saturate(1.2); }
+        }
+        
+        .countdown-finished {
+            text-align: center;
+            padding: 2rem;
+            background: var(--gradient-rebellion);
+            border-radius: var(--border-rad);
+            color: white;
+            animation: finishedPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes finishedPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .finished-title {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .finished-message {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            opacity: 0.9;
+        }
+        
+        :root[data-mode="angry"] .countdown-finished {
+            background: linear-gradient(45deg, #ff0033, #39ff14, #faff00);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            animation: angryFinishedGlitch 1s ease-in-out infinite;
+        }
+        
+        @keyframes angryFinishedGlitch {
+            0%, 100% { 
+                filter: brightness(1) hue-rotate(0deg); 
+                transform: scale(1); 
+            }
+            25% { 
+                filter: brightness(1.5) hue-rotate(90deg); 
+                transform: scale(1.02); 
+            }
+            50% { 
+                filter: brightness(2) hue-rotate(180deg); 
+                transform: scale(1.05); 
+            }
+            75% { 
+                filter: brightness(1.5) hue-rotate(270deg); 
+                transform: scale(1.02); 
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Initialize countdown when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCountdown();
+    addCelebrationStyles();
+});
+
 // ===== GDPR CONSENT MANAGEMENT ===== //
 let consentGiven = false;
 let consentChoices = {
