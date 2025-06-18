@@ -18,23 +18,25 @@ if (IS_PRODUCTION) {
       // No user notification - handle gracefully in background
     });
   
-  // Override email signup for production without backend
-  const originalHandleEmailSignup = handleEmailSignup;
-  window.handleEmailSignup = async function(event) {
-    event.preventDefault();
-    
-    if (!backendAvailable) {
-      // Gracefully handle - just show normal form validation
-      showError(
-        currentMode === 'cute' ? 
-        'oops! something went wrong. please try again later, bb 💖' : 
-        'SUBMISSION ERROR. TRY AGAIN LATER. ⚡'
-      );
-      return;
-    }
-    
-    return originalHandleEmailSignup(event);
-  };
+  // Override email signup for production without backend (only for non-Netlify forms)
+  const emailForm = document.getElementById('emailForm');
+  if (emailForm && !emailForm.hasAttribute('data-netlify')) {
+    const originalHandleEmailSignup = handleEmailSignup;
+    window.handleEmailSignup = async function(event) {
+      event.preventDefault();
+      
+      if (!backendAvailable) {
+        showError(
+          currentMode === 'cute' ? 
+          'oops! something went wrong. please try again later, bb 💖' : 
+          'SUBMISSION ERROR. TRY AGAIN LATER. ⚡'
+        );
+        return;
+      }
+      
+      return originalHandleEmailSignup(event);
+    };
+  }
   
   // Override consent backend calls for production
   const originalSendConsentToBackend = sendConsentToBackend;
