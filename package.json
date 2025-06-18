@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "email-server": "node local-email-server.js",
+    "email-dev": "nodemon local-email-server.js",
     "test": "jest",
     "db:migrate": "npx prisma migrate dev",
     "db:deploy": "npx prisma migrate deploy",
