@@ -303,33 +303,48 @@ body {
 @media (max-width: 768px) {
     .poster-stream {
         top: 0;
-        z-index: 1; /* Keep posters visible but behind text */
+        z-index: -1 !important; /* Force posters completely behind everything on mobile */
     }
     
     .poster-stream .poster {
-        opacity: 0.6; /* More visible on mobile for debugging */
-        width: 150px; /* Smaller posters on mobile */
-        mix-blend-mode: normal; /* Normal blending for better visibility */
-        filter: none; /* Remove blur for debugging */
+        opacity: 0.3 !important; /* Much more transparent on mobile */
+        width: 120px !important; /* Smaller posters on mobile */
+        mix-blend-mode: multiply !important; /* Better blending for readability */
+        filter: blur(0.5px) !important; /* Slight blur to ensure text readability */
         display: block !important;
         visibility: visible !important;
+        z-index: -1 !important;
     }
     
     .poster-stream .poster:hover {
-        z-index: 1; /* Allow hover effects */
-        opacity: 0.8;
+        z-index: -1 !important; /* Ensure hover never brings to front on mobile */
+        opacity: 0.3 !important;
     }
     
-    /* Force poster stream visibility in angry mode on mobile */
+    /* Force poster stream behind everything in angry mode on mobile */
     :root[data-mode="angry"] .poster-stream {
         opacity: 1 !important;
         display: block !important;
+        z-index: -1 !important;
     }
     
     :root[data-mode="angry"] .poster-stream .poster {
-        opacity: 0.7 !important;
+        opacity: 0.3 !important;
         display: block !important;
         visibility: visible !important;
+        z-index: -1 !important;
+    }
+    
+    /* Hide test posters on mobile - they're for desktop debugging only */
+    .poster-stream .test-poster {
+        display: none !important;
+    }
+    
+    /* Ensure only img elements (real posters) are visible on mobile */
+    .poster-stream img.poster {
+        display: block !important;
+        opacity: 0.3 !important;
+        z-index: -1 !important;
     }
 }
 

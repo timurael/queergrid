@@ -544,8 +544,14 @@ function switchLogo() {
     });
 }
 
-// Test function to create a simple visible poster for debugging
+// Test function to create a simple visible poster for debugging (desktop only)
 function createTestPoster() {
+    // Check if we're on mobile - don't create test posters on mobile
+    if (window.innerWidth <= 768) {
+        console.log('Mobile detected - skipping test posters');
+        return;
+    }
+    
     console.log('Creating test poster...');
     const posterStream = document.getElementById('posterStream');
     if (!posterStream) {
@@ -564,8 +570,9 @@ function createTestPoster() {
     posterStream.style.height = '100vh';
     posterStream.style.pointerEvents = 'none';
     
-    // Create a static test poster (non-animated)
+    // Create a static test poster (non-animated) - desktop only
     const staticPoster = document.createElement('div');
+    staticPoster.className = 'test-poster'; // Add class for easier identification
     staticPoster.style.position = 'absolute';
     staticPoster.style.top = '10%';
     staticPoster.style.right = '10%';
@@ -583,8 +590,9 @@ function createTestPoster() {
     staticPoster.style.fontSize = '14px';
     staticPoster.style.textAlign = 'center';
     
-    // Create a floating test poster
+    // Create a floating test poster - desktop only
     const testPoster = document.createElement('div');
+    testPoster.className = 'test-poster'; // Add class for easier identification
     testPoster.style.position = 'absolute';
     testPoster.style.top = '20%';
     testPoster.style.left = '20%';
@@ -605,7 +613,7 @@ function createTestPoster() {
     
     posterStream.appendChild(staticPoster);
     posterStream.appendChild(testPoster);
-    console.log('Test posters created and added!');
+    console.log('Test posters created and added (desktop only)!');
 }
 
 // Enhanced poster initialization with test fallback
@@ -615,16 +623,27 @@ function initializePosters() {
         return;
     }
     
+    const isMobile = window.innerWidth <= 768;
+    
     // Force poster stream to be visible immediately
     posterStream.style.opacity = '1';
     posterStream.style.display = 'block';
     posterStream.style.visibility = 'visible';
     
-    clearPosters();
-    console.log('Starting poster initialization...');
+    // Set mobile-specific styling
+    if (isMobile) {
+        posterStream.style.zIndex = '-1';
+    } else {
+        posterStream.style.zIndex = '999';
+    }
     
-    // Create test poster first
-    createTestPoster();
+    clearPosters();
+    console.log(`Starting poster initialization... (${isMobile ? 'Mobile' : 'Desktop'} mode)`);
+    
+    // Create test poster first (desktop only)
+    if (!isMobile) {
+        createTestPoster();
+    }
     
     posterImages.forEach((imageName, index) => {
         const poster = document.createElement('img');
@@ -675,14 +694,28 @@ function initializePosters() {
         
         // Ensure poster is visible and positioned correctly
         poster.style.position = 'absolute';
-        poster.style.zIndex = '998';
-        poster.style.opacity = '1';
         poster.style.display = 'block';
         poster.style.visibility = 'visible';
-        poster.style.width = '200px';
         poster.style.height = 'auto';
-        poster.style.border = '2px solid #39ff14';
-        poster.style.boxShadow = '0 0 15px rgba(57, 255, 20, 0.5)';
+        
+        // Apply mobile or desktop styling
+        if (isMobile) {
+            poster.style.zIndex = '-1';
+            poster.style.opacity = '0.3';
+            poster.style.width = '120px';
+            poster.style.filter = 'blur(0.5px)';
+            poster.style.mixBlendMode = 'multiply';
+            poster.style.border = '1px solid rgba(57, 255, 20, 0.3)';
+            poster.style.boxShadow = 'none';
+        } else {
+            poster.style.zIndex = '998';
+            poster.style.opacity = '1';
+            poster.style.width = '200px';
+            poster.style.filter = 'none';
+            poster.style.mixBlendMode = 'normal';
+            poster.style.border = '2px solid #39ff14';
+            poster.style.boxShadow = '0 0 15px rgba(57, 255, 20, 0.5)';
+        }
         
         // Add the poster to the stream first
         posterStream.appendChild(poster);
