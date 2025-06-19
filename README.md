@@ -8,14 +8,15 @@ A sparkly, inclusive website for the queer tech community built with radical lov
 - **Mobile-First Design**: Responsive and accessible on all devices
 - **Interactive Elements**: Animated carousel, sparkle effects, and smooth scrolling
 - **Email Signup**: Collect community member emails with style
-- **Telegram Integration**: Direct links to join your community chat
+- **Discord Integration**: Primary community chat platform
+- **Signal Support**: Alternative secure chat option
 - **Accessibility**: Screen reader friendly, keyboard navigation, reduced motion support
 
 ## 🚀 Quick Start
 
 1. **Open the website**: Simply open `index.html` in your web browser
 2. **Customize content**: Edit the HTML file to add your community's information
-3. **Add your links**: Update Telegram and social media links
+3. **Add your links**: Update Discord and social media links
 4. **Deploy**: Upload to any web hosting service
 
 ## 🎨 Customization Guide
@@ -40,13 +41,21 @@ A sparkly, inclusive website for the queer tech community built with radical lov
 </p>
 ```
 
-### Add Your Telegram Link
+### Community Chat Setup
 
-In `script.js`, find the `joinTelegram()` function and replace with your actual invite link:
+Discord is the primary chat platform. In `script.js`, the `joinDiscord()` function is pre-configured:
 ```javascript
-function joinTelegram() {
-    const telegramLink = 'https://t.me/your_actual_group_invite_link';
-    // ... rest of function
+function joinDiscord() {
+    const discordLink = 'https://discord.gg/7QW2jpgs'; // Ready to use!
+    // ... sparkle effects and navigation
+}
+```
+
+Signal is available as an alternative secure option:
+```javascript
+function joinSignal() {
+    const signalLink = 'https://signal.group/#CjQKIN6mrjEmePaXryf1zQ__kW7CF0W-fxs87_Q9KV0-gqEeEhCrXBYYjv_vUkCGo5q368b8';
+    // ... sparkle effects and navigation
 }
 ```
 
@@ -88,7 +97,7 @@ fetch('https://api.convertkit.com/v3/forms/YOUR_FORM_ID/subscribe', {
 Update the footer links in `index.html`:
 ```html
 <div class="footer-links">
-    <a href="https://t.me/your_group" class="footer-link">Telegram</a>
+    <a href="https://discord.gg/7QW2jpgs" class="footer-link">Discord</a>
     <a href="https://instagram.com/your_handle" class="footer-link">Instagram</a>
     <a href="https://notion.so/your_page" class="footer-link">Notion</a>
 </div>
@@ -602,7 +611,8 @@ Built with queer rage and revolutionary love. For support:
 - 📧 Email: support@queergrid.org
 - 🔒 Privacy: privacy@queergrid.org
 - 🐛 Issues: GitHub Issues
-- 💬 Community: [Signal Group](https://signal.group/#CjQKIN6mrjEmePaXryf1zQ__kW7CF0W-fxs87_Q9KV0-gqEeEhCrXBYYjv_vUkCGo5q368b8)
+- 💬 Community Chat: [Discord Server](https://discord.gg/7QW2jpgs)
+- 🔐 Secure Alternative: [Signal Group](https://signal.group/#CjQKIN6mrjEmePaXryf1zQ__kW7CF0W-fxs87_Q9KV0-gqEeEhCrXBYYjv_vUkCGo5q368b8)
 
 ---
 

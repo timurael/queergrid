@@ -509,9 +509,26 @@ function toggleMood() {
     switchLogo();
     
     if (currentMode === 'angry') {
-        initializePosters();
-        initializeAngryMode();
+        console.log('Switching to ANGRY mode - initializing posters...');
+        
+        // Force create test poster immediately
+        createTestPoster();
+        
+        // Add a small delay to ensure DOM is ready, then initialize posters
+        setTimeout(() => {
+            initializePosters();
+            initializeAngryMode();
+        }, 100);
+        
+        // Backup initialization in case the first one fails
+        setTimeout(() => {
+            if (posters.length === 0) {
+                console.log('Backup poster initialization...');
+                initializePosters();
+            }
+        }, 500);
     } else {
+        console.log('Switching to CUTE mode - clearing posters...');
         clearPosters();
         clearAngryMode();
     }
@@ -527,9 +544,87 @@ function switchLogo() {
     });
 }
 
-// Initialize poster stream for angry mode
+// Test function to create a simple visible poster for debugging
+function createTestPoster() {
+    console.log('Creating test poster...');
+    const posterStream = document.getElementById('posterStream');
+    if (!posterStream) {
+        console.error('Poster stream not found!');
+        return;
+    }
+    
+    // Make poster stream visible immediately
+    posterStream.style.opacity = '1';
+    posterStream.style.display = 'block';
+    posterStream.style.zIndex = '999';
+    posterStream.style.position = 'fixed';
+    posterStream.style.top = '0';
+    posterStream.style.left = '0';
+    posterStream.style.width = '100%';
+    posterStream.style.height = '100vh';
+    posterStream.style.pointerEvents = 'none';
+    
+    // Create a static test poster (non-animated)
+    const staticPoster = document.createElement('div');
+    staticPoster.style.position = 'absolute';
+    staticPoster.style.top = '10%';
+    staticPoster.style.right = '10%';
+    staticPoster.style.width = '150px';
+    staticPoster.style.height = '150px';
+    staticPoster.style.backgroundColor = '#ff0033';
+    staticPoster.style.border = '5px solid #39ff14';
+    staticPoster.style.zIndex = '1001';
+    staticPoster.innerText = 'STATIC TEST';
+    staticPoster.style.display = 'flex';
+    staticPoster.style.alignItems = 'center';
+    staticPoster.style.justifyContent = 'center';
+    staticPoster.style.color = '#fff';
+    staticPoster.style.fontWeight = 'bold';
+    staticPoster.style.fontSize = '14px';
+    staticPoster.style.textAlign = 'center';
+    
+    // Create a floating test poster
+    const testPoster = document.createElement('div');
+    testPoster.style.position = 'absolute';
+    testPoster.style.top = '20%';
+    testPoster.style.left = '20%';
+    testPoster.style.width = '200px';
+    testPoster.style.height = '200px';
+    testPoster.style.backgroundColor = '#39ff14';
+    testPoster.style.border = '5px solid #ff0033';
+    testPoster.style.zIndex = '1000';
+    testPoster.innerText = 'FLOATING TEST';
+    testPoster.style.display = 'flex';
+    testPoster.style.alignItems = 'center';
+    testPoster.style.justifyContent = 'center';
+    testPoster.style.color = '#000';
+    testPoster.style.fontWeight = 'bold';
+    testPoster.style.fontSize = '16px';
+    testPoster.style.textAlign = 'center';
+    testPoster.style.animation = 'posterFloat 10s infinite linear';
+    
+    posterStream.appendChild(staticPoster);
+    posterStream.appendChild(testPoster);
+    console.log('Test posters created and added!');
+}
+
+// Enhanced poster initialization with test fallback
 function initializePosters() {
+    if (!posterStream) {
+        console.warn('Poster stream element not found');
+        return;
+    }
+    
+    // Force poster stream to be visible immediately
+    posterStream.style.opacity = '1';
+    posterStream.style.display = 'block';
+    posterStream.style.visibility = 'visible';
+    
     clearPosters();
+    console.log('Starting poster initialization...');
+    
+    // Create test poster first
+    createTestPoster();
     
     posterImages.forEach((imageName, index) => {
         const poster = document.createElement('img');
@@ -537,18 +632,70 @@ function initializePosters() {
         poster.className = 'poster';
         poster.alt = 'Queer rage poster';
         
+        // Add load event listener for debugging
+        poster.onload = function() {
+            console.log(`Poster loaded: ${imageName}`);
+            // Make sure it's visible once loaded
+            poster.style.opacity = '1';
+            poster.style.display = 'block';
+            poster.style.visibility = 'visible';
+        };
+        
+        poster.onerror = function() {
+            console.error(`Failed to load poster: ${imageName}`);
+            // Create a fallback colored div if image fails
+            const fallback = document.createElement('div');
+            fallback.style.position = 'absolute';
+            fallback.style.width = '200px';
+            fallback.style.height = '200px';
+            fallback.style.backgroundColor = index % 2 ? '#39ff14' : '#ff0033';
+            fallback.style.border = '3px solid #fff';
+            fallback.style.left = poster.style.left;
+            fallback.style.transform = poster.style.transform;
+            fallback.style.animationDelay = poster.style.animationDelay;
+            fallback.style.zIndex = '997';
+            fallback.style.animation = 'posterFloat 25s infinite linear';
+            fallback.innerText = `IMG ${index + 1}`;
+            fallback.style.display = 'flex';
+            fallback.style.alignItems = 'center';
+            fallback.style.justifyContent = 'center';
+            fallback.style.color = '#000';
+            fallback.style.fontWeight = 'bold';
+            posterStream.appendChild(fallback);
+        };
+        
         // Random positioning and rotation
-        const leftPosition = Math.random() * (window.innerWidth - 200);
+        const leftPosition = Math.random() * Math.max(100, window.innerWidth - 250);
         const rotation = Math.random() * 30 - 15; // -15 to 15 degrees
-        const delay = index * 2; // Stagger the animations
+        const delay = index * 4; // Stagger the animations more
         
         poster.style.left = `${leftPosition}px`;
         poster.style.transform = `rotate(${rotation}deg)`;
         poster.style.animationDelay = `${delay}s`;
         
+        // Ensure poster is visible and positioned correctly
+        poster.style.position = 'absolute';
+        poster.style.zIndex = '998';
+        poster.style.opacity = '1';
+        poster.style.display = 'block';
+        poster.style.visibility = 'visible';
+        poster.style.width = '200px';
+        poster.style.height = 'auto';
+        poster.style.border = '2px solid #39ff14';
+        poster.style.boxShadow = '0 0 15px rgba(57, 255, 20, 0.5)';
+        
+        // Add the poster to the stream first
         posterStream.appendChild(poster);
         posters.push(poster);
+        
+        // Force animation to start after a brief delay
+        setTimeout(() => {
+            poster.style.animation = 'posterFloat 25s infinite linear';
+            console.log(`Started animation for poster ${index + 1}`);
+        }, 200 + index * 100);
     });
+    
+    console.log(`Initialized ${posters.length} posters for angry mode. Poster stream visibility: ${getComputedStyle(posterStream).opacity}`);
 }
 
 function clearPosters() {
@@ -764,19 +911,35 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-// ===== TELEGRAM REVOLUTION =====
-function joinTelegram() {
-    // Replace with your actual Telegram group invite link
-    const telegramLink = 'https://t.me/your_actual_queer_grid_invite_link';
+// ===== DISCORD REVOLUTION =====
+function joinDiscord() {
+    // Primary Discord community link
+    const discordLink = 'https://discord.gg/7QW2jpgs';
     
     showNotification('opening the portal to revolution central 👑✨', 'info');
     
     // Create mega sparkle effect
     createMegaSparkleExplosion();
     
-    // Open Telegram after sparkle effect
+    // Open Discord after sparkle effect
     setTimeout(() => {
-        window.open(telegramLink, '_blank');
+        window.open(discordLink, '_blank');
+    }, 1200);
+}
+
+// ===== SIGNAL REVOLUTION (ALTERNATIVE) =====
+function joinSignal() {
+    // Alternative Signal group invite link
+    const signalLink = 'https://signal.group/#CjQKIN6mrjEmePaXryf1zQ__kW7CF0W-fxs87_Q9KV0-gqEeEhCrXBYYjv_vUkCGo5q368b8';
+    
+    showNotification('opening secure chaos portal 🔐✨', 'info');
+    
+    // Create mega sparkle effect
+    createMegaSparkleExplosion();
+    
+    // Open Signal after sparkle effect
+    setTimeout(() => {
+        window.open(signalLink, '_blank');
     }, 1200);
 }
 
@@ -1860,7 +2023,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Export functions for potential external use
 window.queerGridRevolution = {
-    joinTelegram,
+            joinDiscord,
+        joinSignal,
+        createTestPoster,
     createSparkleEffect,
     createMultipleSparkles,
     showNotification,

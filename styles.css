@@ -85,7 +85,7 @@ html {
 }
 
 /* Ensure anchor links don't get hidden behind fixed header */
-#story, #join, #signal, #countdown, #how-we-work {
+#story, #join, #discord, #countdown, #how-we-work {
     scroll-margin-top: 180px; /* Account for mood toggle + header */
 }
 
@@ -210,7 +210,7 @@ body {
 /* ===== POSTER STREAM - ANGRY MODE ===== */
 .poster-stream {
     position: fixed;
-    top: 70vh; /* Start from end of main section on desktop */
+    top: 0; /* Start from top of page */
     left: 0;
     width: 100%;
     height: 100vh;
@@ -219,10 +219,20 @@ body {
     opacity: 0;
     transition: opacity 0.5s ease;
     overflow: hidden;
+    display: block;
 }
 
 :root[data-mode="angry"] .poster-stream {
-    opacity: 1;
+    opacity: 1 !important;
+    display: block !important;
+    visibility: visible !important;
+    z-index: 999 !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    pointer-events: none !important;
 }
 
 .poster-stream .poster {
@@ -230,14 +240,16 @@ body {
     width: 200px;
     height: auto;
     object-fit: cover;
-    opacity: 0.8;
+    opacity: 0.9;
     filter: none;
-    mix-blend-mode: multiply;
-    border: 1px solid #39ff14;
-    box-shadow: inset 0 0 20px rgba(57, 255, 20, 0.1);
+    mix-blend-mode: normal; /* Changed from multiply for better visibility */
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.5), inset 0 0 20px rgba(57, 255, 20, 0.1);
     transition: all 0.3s ease;
     will-change: transform;
     z-index: 1; /* Ensure posters stay behind text */
+    display: block !important;
+    visibility: visible !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -253,21 +265,37 @@ body {
 
 @keyframes posterFloat {
     0% {
-        transform: translateY(30vh) rotate(7deg); /* Start from within visible area */
+        transform: translateY(100vh) rotate(7deg); /* Start from bottom of screen */
     }
     100% {
-        transform: translateY(-120vh) rotate(-15deg);
+        transform: translateY(-30vh) rotate(-15deg); /* End above screen */
     }
 }
 
-/* Desktop: Posters start from story section */
+/* Desktop: Posters adjustments */
 @media (min-width: 769px) {
-    .poster-stream {
-        top: 100vh; /* Start when the story section begins - perfect timing for birth */
-    }
-    
     .poster-stream .poster {
         opacity: 0.7; /* Slightly more transparent on desktop */
+        width: 200px; /* Ensure proper size on desktop */
+    }
+    
+    /* Ensure posters float properly in angry mode on desktop */
+    :root[data-mode="angry"] .poster-stream .poster {
+        animation: posterFloat 20s infinite linear !important;
+        opacity: 1 !important;
+        display: block !important; /* Force display on desktop */
+        visibility: visible !important;
+        position: absolute !important;
+        z-index: 998 !important;
+        width: 200px !important;
+        height: auto !important;
+    }
+    
+    /* Force poster stream to be visible on desktop in angry mode */
+    :root[data-mode="angry"] .poster-stream {
+        display: block !important;
+        opacity: 1 !important;
+        pointer-events: none;
     }
 }
 
@@ -275,28 +303,33 @@ body {
 @media (max-width: 768px) {
     .poster-stream {
         top: 0;
-        z-index: -1; /* Force posters completely behind everything on mobile */
+        z-index: 1; /* Keep posters visible but behind text */
     }
     
     .poster-stream .poster {
-        opacity: 0.3; /* Much more transparent on mobile */
+        opacity: 0.6; /* More visible on mobile for debugging */
         width: 150px; /* Smaller posters on mobile */
-        mix-blend-mode: screen; /* Better blending for readability */
-        filter: blur(1px); /* Slight blur to ensure text readability */
+        mix-blend-mode: normal; /* Normal blending for better visibility */
+        filter: none; /* Remove blur for debugging */
+        display: block !important;
+        visibility: visible !important;
     }
     
     .poster-stream .poster:hover {
-        z-index: -1; /* Ensure hover never brings to front on mobile */
-        opacity: 0.4;
+        z-index: 1; /* Allow hover effects */
+        opacity: 0.8;
     }
     
-    @keyframes posterFloat {
-        0% {
-            transform: translateY(100vh) rotate(7deg);
-        }
-        100% {
-            transform: translateY(-120vh) rotate(-15deg);
-        }
+    /* Force poster stream visibility in angry mode on mobile */
+    :root[data-mode="angry"] .poster-stream {
+        opacity: 1 !important;
+        display: block !important;
+    }
+    
+    :root[data-mode="angry"] .poster-stream .poster {
+        opacity: 0.7 !important;
+        display: block !important;
+        visibility: visible !important;
     }
 }
 
@@ -488,8 +521,16 @@ body {
 }
 
 :root[data-mode="angry"] .floating-elements {
-    opacity: 0;
+    opacity: 1;
     pointer-events: none;
+}
+
+:root[data-mode="angry"] .floating-emoji {
+    color: #39ff14;
+    text-shadow: 0 0 10px #39ff14, 0 0 20px #ff0033;
+    animation: gentleFloat 15s ease-in-out infinite, textGlitch 4s infinite linear;
+    opacity: 0.6;
+    filter: brightness(1.2) hue-rotate(45deg);
 }
 
 .floating-emoji {
@@ -854,7 +895,7 @@ body {
     width: 100%;
 }
 
-.telegram-nav {
+.discord-nav, .telegram-nav {
     background: var(--gradient-rebellion);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
