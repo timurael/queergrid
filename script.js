@@ -343,8 +343,8 @@ function acceptAllConsent() {
     // Show success message
     showNotification(
         currentMode === 'cute' ? 
-        'yay! thanks for trusting us with your data, bb! 💖' : 
-        'CONSENT ACCEPTED. REVOLUTION CONTINUES. ⚡',
+        'thanks! your data is safe with us 💖' : 
+        'CONSENT ACCEPTED. ⚡',
         'success'
     );
     
@@ -368,8 +368,8 @@ function acceptSelectedConsent() {
     
     showNotification(
         currentMode === 'cute' ? 
-        'perfect! your choices have been saved 💫' : 
-        'CONSENT PREFERENCES SAVED. ⚡',
+        'got it! preferences saved 💫' : 
+        'PREFERENCES SAVED. ⚡',
         'success'
     );
     
@@ -387,8 +387,8 @@ function rejectAllConsent() {
     
     showNotification(
         currentMode === 'cute' ? 
-        'no worries! only essential cookies for you 🍪' : 
-        'MINIMAL DATA COLLECTION ACTIVE. ⚡',
+        'understood! essential only 🍪' : 
+        'ESSENTIAL ONLY. ⚡',
         'info'
     );
 }
