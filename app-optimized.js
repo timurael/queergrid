@@ -506,77 +506,6 @@ const AngryMode = {
     }
 };
 
-// ===== EMAIL SYSTEM =====
-const EmailSystem = {
-    async init() {
-        const form = Performance.$(CONFIG.SELECTORS.emailForm);
-        if (form && !form.hasAttribute('data-netlify')) {
-            // Only add JavaScript handling if NOT using Netlify forms
-            form.addEventListener('submit', this.handleSubmit.bind(this));
-        }
-        
-        // Check backend availability only if not using Netlify forms
-        if (form && !form.hasAttribute('data-netlify')) {
-            await API.checkHealth();
-        }
-    },
-
-    async handleSubmit(event) {
-        event.preventDefault();
-        
-        const formData = new FormData(event.target);
-        const email = formData.get('email')?.trim();
-        const consent = formData.get('consent') === 'on';
-        
-        // Validation
-        if (!this.validateEmail(email)) {
-            UI.showMessage('Please enter a valid email address', 'error');
-            return;
-        }
-        
-        if (!consent) {
-            UI.showMessage('Please accept our privacy policy', 'error');
-            return;
-        }
-        
-        if (!AppState.get('consentGiven')) {
-            UI.showMessage('Please accept our GDPR consent first', 'error');
-            ConsentSystem.show();
-            return;
-        }
-        
-        UI.setLoading(true);
-        UI.hideMessages();
-        
-        try {
-            const result = await API.subscribeEmail({
-                email,
-                consent,
-                source: 'website',
-                timestamp: new Date().toISOString()
-            });
-            
-            UI.showMessage(result.message || 'Successfully subscribed!', 'success');
-            event.target.reset();
-            Effects.createExplosion(Performance.$('#submitBtn'));
-            
-        } catch (error) {
-            // Always show generic error message regardless of backend status
-            const errorMsg = AppState.get('currentMode') === 'cute' 
-                ? 'oops! something went wrong. please try again later, bb 💖'
-                : 'SUBMISSION ERROR. TRY AGAIN LATER. ⚡';
-            UI.showMessage(errorMsg, 'error');
-            
-        } finally {
-            UI.setLoading(false);
-        }
-    },
-
-    validateEmail(email) {
-        return email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
-};
-
 // ===== CONSENT SYSTEM =====
 const ConsentSystem = {
     init() {
@@ -704,7 +633,6 @@ const App = {
         // Initialize modules in order of dependency
         await Promise.all([
             ConsentSystem.init(),
-            EmailSystem.init(),
             MoodSystem.init()
         ]);
 

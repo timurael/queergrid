@@ -59,17 +59,6 @@
                                 </div>
                             </label>
                         </div>
-                        
-                        <div class="consent-item">
-                            <label class="consent-checkbox">
-                                <input type="checkbox" id="marketingConsent" checked>
-                                <span class="checkmark"></span>
-                                <div class="consent-label">
-                                    <strong>Email Updates</strong>
-                                    <p>Consent to receive our newsletter and community updates.</p>
-                                </div>
-                            </label>
-                        </div>
                     </div>
                 </div>
 
@@ -78,7 +67,6 @@
                         <summary>What data do we collect? 📋</summary>
                         <div class="privacy-content">
                             <ul>
-                                <li><strong>Email addresses:</strong> For newsletter and community updates</li>
                                 <li><strong>Basic analytics:</strong> Page visits, referrer info (anonymized)</li>
                                 <li><strong>Technical data:</strong> IP address, browser type (for security)</li>
                                 <li><strong>Consent records:</strong> Your privacy choices and when you made them</li>
@@ -177,7 +165,6 @@
             </div>
             <nav class="nav">
                 <a href="#story" class="nav-link">My Story</a>
-                <a href="#join" class="nav-link">Join Us</a>
                 <a href="#discord" class="nav-link discord-nav">Get In 💬</a>
             </nav>
         </div>
@@ -210,9 +197,6 @@
                     <a href="#discord" class="btn btn-primary mega-sparkle-btn">
                         <span class="cute-mode-text">Join Discord 💬</span>
                         <span class="angry-mode-text">JOIN DISCORD ⚡</span>
-                    </a>
-                    <a href="#join" class="btn btn-secondary mega-sparkle-btn">
-                        <span>Drop Your Email</span>
                     </a>
                     <a href="https://www.instagram.com/queer.grid/" target="_blank" class="btn btn-instagram mega-sparkle-btn">
                         <span class="cute-mode-text">follow us in insta</span>
@@ -382,7 +366,7 @@
 
             <!-- Interactive Element -->
             <div class="work-actions">
-                <a href="#join" class="btn btn-primary mega-sparkle-btn work-cta">
+                <a href="#discord" class="btn btn-primary mega-sparkle-btn work-cta">
                     <span class="cute-mode-text">join our beautiful chaos 🌈</span>
                     <span class="angry-mode-text">JOIN THE UPRISING 🔥</span>
                 </a>
@@ -457,82 +441,6 @@
         </div>
     </section>
 
-    <!-- Join the Revolution -->
-    <section id="join" class="join-section">
-        <div class="container">
-            <div class="join-content">
-                <div class="join-header">
-                    <h2 class="join-title">
-                        drop your email for the newsletter.
-                    </h2>
-                </div>
-                
-                <form class="join-form" id="emailForm" name="email-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-                    <div class="form-container">
-                        <!-- Hidden bot field for spam protection -->
-                        <p class="hidden">
-                            <label>
-                                Don't fill this out if you're human: <input name="bot-field" />
-                            </label>
-                        </p>
-                        
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
-                            placeholder="your cutest email <3"
-                            required
-                            class="email-input"
-                        >
-                        <button type="submit" id="submitBtn" class="submit-btn mega-sparkle-btn">
-                            <span class="btn-text">Join Us</span>
-                            <span class="btn-loading" style="display: none;">
-                                <span class="spinner"></span> Processing...
-                            </span>
-                        </button>
-                    </div>
-                    
-                    <!-- GDPR Consent Checkbox -->
-                    <div class="consent-section">
-                        <label class="consent-checkbox">
-                            <input type="checkbox" id="consent" name="consent" required>
-                            <span class="checkmark"></span>
-                            <span class="consent-text">
-                                I consent to receiving email newsletters and updates from Queer Grid. 
-                                I understand I can unsubscribe at any time. 
-                                <a href="#privacy" class="privacy-link">Privacy Policy</a> | 
-                                <a href="#terms" class="privacy-link">Terms</a>
-                            </span>
-                        </label>
-                    </div>
-                    
-                    <!-- Hidden UTM tracking fields -->
-                    <input type="hidden" id="utmSource" name="utmSource">
-                    <input type="hidden" id="utmMedium" name="utmMedium">
-                    <input type="hidden" id="utmCampaign" name="utmCampaign">
-                    <input type="hidden" id="source" name="source" value="website">
-                    
-                    <p class="form-microcopy">
-                        no spam, just revolutionary updates and occasional chaos reports 💅
-                    </p>
-                    
-                    <div class="form-messages">
-                        <div class="success-message" id="successMessage" style="display: none;"></div>
-                        <div class="error-message" id="errorMessage" style="display: none;"></div>
-                    </div>
-                </form>
-                
-                <!-- Data Rights Information -->
-                <div class="data-rights-info">
-                    <p><small>
-                        🔒 Your privacy matters. You have the right to access, rectify, or delete your data at any time. 
-                        <a href="#" id="dataRightsLink" class="data-rights-link">Learn about your data rights</a>
-                    </small></p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Discord CTA -->
     <section id="discord" class="telegram-section">
         <div class="container">
@@ -564,8 +472,6 @@
             </div>
         </div>
     </section>
-
-
 
     <!-- Footer -->
     <footer class="footer">

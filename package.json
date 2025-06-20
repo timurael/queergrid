@@ -1,13 +1,11 @@
 {
   "name": "queer-grid-optimized",
   "version": "1.2.0",
-  "description": "Performance-optimized Queer Grid with GDPR-compliant email collection",
+  "description": "Performance-optimized Queer Grid",
   "main": "optimized-server.js",
   "scripts": {
     "start": "node optimized-server.js",
-    "dev": "concurrently \"npm run email-server\" \"npm run serve\"",
-    "email-server": "node optimized-server.js",
-    "email-dev": "nodemon optimized-server.js",
+    "dev": "npm run serve",
     "serve": "python3 -m http.server 8001",
     "test": "jest",
     "db:migrate": "npx prisma migrate dev",
@@ -31,7 +29,6 @@
     "dotenv": "^16.3.1",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.7",
     "@prisma/client": "^5.6.0",
     "prisma": "^5.6.0",
     "winston": "^3.11.0",
@@ -55,8 +52,6 @@
     "imagemin-pngquant": "^9.0.2"
   },
   "keywords": [
-    "gdpr",
-    "email-collection", 
     "privacy",
     "queer-tech"
   ],

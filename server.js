@@ -139,13 +139,11 @@ app.use((req, res, next) => {
 });
 
 // Import routes
-const emailRoutes = require('./routes/email');
 const gdprRoutes = require('./routes/gdpr');
 const adminRoutes = require('./routes/admin');
 const publicRoutes = require('./routes/public');
 
 // API Routes
-app.use('/api/email', emailRoutes);
 app.use('/api/gdpr', gdprRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/public', publicRoutes);

@@ -85,7 +85,7 @@ html {
 }
 
 /* Ensure anchor links don't get hidden behind fixed header */
-#story, #join, #discord, #countdown, #how-we-work {
+#story, #discord, #countdown, #how-we-work {
     scroll-margin-top: 180px; /* Account for mood toggle + header */
 }
 
@@ -1247,113 +1247,6 @@ body {
 .final-block > * {
     position: relative;
     z-index: 2;
-}
-
-/* ===== JOIN SECTION REVOLUTION ===== */
-.join-section {
-    padding: var(--section-pad);
-    background: var(--gradient-chaos);
-    position: relative;
-    overflow: hidden;
-    z-index: 10; /* Ensure join section stays above posters */
-}
-
-/* Hide netlify bot field */
-.hidden {
-    display: none;
-}
-
-.join-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(15px);
-}
-
-.join-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.join-title {
-    font-family: var(--font-heading);
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: 900;
-    margin-bottom: 1.5rem;
-    color: #2d2d2d;
-}
-
-.join-subtitle {
-    font-size: clamp(1.3rem, 3.5vw, 1.6rem);
-    color: #555;
-    margin-bottom: 3rem;
-    line-height: 1.6;
-}
-
-.small-text {
-    font-size: 0.9em;
-    font-style: italic;
-    opacity: 0.8;
-}
-
-.form-container {
-    display: flex;
-    gap: 1.5rem;
-    max-width: 600px;
-    margin: 0 auto 1.5rem;
-    flex-wrap: wrap;
-}
-
-.email-input {
-    flex: 1;
-    min-width: 300px;
-    padding: 1.5rem 2rem;
-    border: 3px solid rgba(255, 20, 147, 0.3);
-    border-radius: var(--border-rad);
-    font-size: 1.2rem;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s var(--smooth);
-    font-family: var(--font-body);
-}
-
-.email-input:focus {
-    outline: none;
-    border-color: var(--hot-pink);
-    box-shadow: 0 0 0 5px rgba(255, 20, 147, 0.2);
-    transform: translateY(-2px);
-}
-
-.submit-btn {
-    background: var(--gradient-fire);
-    color: white;
-    border: none;
-    padding: 1.5rem 2rem;
-    border-radius: var(--border-rad);
-    font-family: var(--font-heading);
-    font-weight: 700;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s var(--bounce);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-transform: lowercase;
-}
-
-.form-microcopy {
-    color: #777;
-    font-style: italic;
-    font-size: 1.1rem;
-    max-width: 500px;
-    margin: 0 auto;
 }
 
 /* ===== TELEGRAM SECTION REVOLUTION ===== */
